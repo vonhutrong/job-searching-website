@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+    <th:block th:fragment="sign-up">
+
+    </th:block>
+
+    <th:block th:fragment="header">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Tìm việc trực tuyến</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a th:href="@{/}">Trang chủ</a></li>
+                </ul>
+            </div>
+        </nav>
+    </th:block>
+
+    <th:block th:fragment="search">
+        <style>
+            .my-group .form-control{
+                width:50%;
+            }
+        </style>
+        <script>
+            if ( $.browser.webkit ) {
+                $(".my-group-button").css("height","+=1px");
+            }
+        </script>
+
+        <div class="input-group my-group">
+            <input type="text" class="form-control" name="snpid" placeholder="Test"/>
+            <select id="lunch" class="selectpicker form-control" data-live-search="true" title="Please select a lunch ...">
+                <option>Ngành nghề</option>
+            </select>
+            <span class="input-group-btn">
+                <button class="btn btn-default my-group-button" type="submit">Tìm kiếm</button>
+            </span>
+        </div>
+
+        <div class="text-right">
+            <a href="#">Tìm kiếm nâng cao</a>
+        </div>
+    </th:block>
+
+    <th:block th:fragment="apply-recruitment">
+        <form>
+            <h2>Nộp đơn trực tuyến</h2>
+            <div class="form-group">
+                <label>Bạn ứng tuyển hồ sơ vào <span>...</span></label>
+            </div>
+            <div class="form-group">
+                <label>Chức danh</label>
+                <input class="form-control" placeholder="Nhân viên ..."/>
+            </div>
+            <div class="form-group">
+                <label>Tên công ty</label>
+                <input class="form-control" placeholder="Công ty ..."/>
+            </div>
+            <div class="form-group">
+                <label>Tên của bạn</label>
+                <input class="form-control"/>
+            </div>
+            <div class="form-group">
+                Chọn hồ sơ
+                <button type="button" class="btn btn-default">Tải lên từ máy tính</button>
+            </div>
+            <div class="form-group text-right">
+                <div class="col-md-4 col-md-offset-2">
+                    <button class="btn btn-default btn-block">Huỷ</button>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-primary btn-block">Chấp nhận</button>
+                </div>
+            </div>
+        </form>
+    </th:block>
+
+</body>
+</html>

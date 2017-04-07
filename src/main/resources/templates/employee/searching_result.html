@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/common::head" />
+    <title>Kết quả tìm kiếm</title>
+</head>
+<body>
+    <div class="container">
+        <th:block th:include="fragments/employee::header"></th:block>
+        <div class="col-lg-6 col-lg-offset-3">
+            <h3>Kết quả tìm kiếm việc làm</h3>
+            Với từ khóa "<span>...</span>"
+            <th:block th:include="fragments/recruitment::review"></th:block>
+        </div>
+        <th:block th:include="fragments/common::footer"></th:block>
+    </div>
+</body>
+</html>

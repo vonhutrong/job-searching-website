@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/common::head" />
+    <title>Đăng tin tuyển dụng</title>
+</head>
+<body>
+    <div class="container">
+        <th:block th:include="fragments/employer::header"></th:block>
+        <div class="col-lg-6 col-lg-offset-3">
+            <th:block th:include="fragments/recruitment::content"></th:block>
+        </div>
+        <th:block th:include="fragments/common::footer"></th:block>
+    </div>
+</body>
+</html>

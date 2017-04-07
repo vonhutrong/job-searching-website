@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+    <th:block th:fragment="review">
+        <div class="row">
+            <div class="col-md-3">
+                <img src="#" width="100px" height="100px"/>
+            </div>
+            <div>
+                <span>Công ty ...</span><br/>
+                <span><i>Thời gian, lượt xem</i></span><br/>
+                <span>Nội dung ...</span>
+            </div>
+        </div>
+    </th:block>
+
+    <th:block th:fragment="details">
+        <span> (công việc) tại Công ty ...</span><br/>
+        <span>Địa chỉ</span><br/>
+        Mô tả chi tiết công việc<br/>
+        <p>...</p>
+        Kinh nghiệm/kỹ năng chi tiết<br/>
+        <p>...</p>
+        Mô tả<br/>
+        Thông tin liên hệ<br/>
+        Ngày gởi: ... Ngày hết hạn: ...<br/>
+        <button type="button" class="btn">Nộp đơn</button><br/>
+        Tags: xxx, xxx
+    </th:block>
+
+    <th:block th:fragment="content">
+        <form>
+            <div class="form-group">
+                <label>Tiêu đề</label>
+                <input class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>Nội dung</label>
+                <textarea class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Mức lương</label>
+                <div class="form-group row">
+                    <div class="col-md-4"><input class="form-control"/></div>
+                    <div class="col-md-2"><span> đến </span></div>
+                    <div class="col-md-4"><input class="form-control"/></div>
+                    <div class="col-md-2"><span> đồng</span></div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label>Ngành nghề</label>
+                <select class="form-control">
+                    <option>Công nghệ thông tin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Trình độ</label>
+                <select class="form-control">
+                    <option>Đại học</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Giới tính</label>
+                <label class="radio-inline"><input type="radio"/>Nam</label>
+                <label class="radio-inline"><input type="radio"/>Nữ</label>
+            </div>
+            <div class="form-group">
+                <label>Độ tuổi</label>
+                <select class="form-control">
+                    <option>18</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Hạn nộp hồ sơ</label>
+                <input class="form-control"/>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </th:block>
+
+</body>
+</html>
