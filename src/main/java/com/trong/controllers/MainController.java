@@ -1,9 +1,12 @@
 package com.trong.controllers;
 
 import com.trong.form.EmployeeAccountForm;
+import com.trong.form.EmployerAccountForm;
 import com.trong.model.Employee;
+import com.trong.model.Employer;
 import com.trong.model.User;
 import com.trong.service.EmployeeService;
+import com.trong.service.EmployerService;
 import com.trong.service.RoleService;
 import com.trong.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class MainController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private EmployerService employerService;
+
     @RequestMapping("/")
     public String index() {
         return "redirect:/nguoi-dung/dang-ky";
@@ -37,6 +43,7 @@ public class MainController {
             model.addAttribute("employeeAccountForm", new EmployeeAccountForm());
             return "employee/sign_up";
         } else if ("doanh-nghiep".equals(accountType)) {
+            model.addAttribute("employerAccountForm", new EmployerAccountForm());
             return "employer/sign_up";
         }
         return "index";
@@ -53,6 +60,26 @@ public class MainController {
         employee.setUser(user);
         employee.setName(employeeAccountForm.getName());
         employeeService.save(employee);
+
+        return "index";
+    }
+
+    @PostMapping("/dang-ky/doanh-nghiep")
+    private String signUp(@ModelAttribute EmployerAccountForm employerAccountForm) {
+        User user = new User();
+        user.setEmail(employerAccountForm.getEmail());
+        user.setPassword(employerAccountForm.getPassword());
+        user.setRoles(new HashSet<>(Arrays.asList(roleService.findFirstByName("ROLE_EMPLOYER"))));
+
+        Employer employer = new Employer();
+        employer.setUser(user);
+        employer.setName(employerAccountForm.getName());
+        employer.setDescription(employerAccountForm.getDescription());
+        employer.setAddress(employerAccountForm.getAddress());
+        employer.setPhoneNumber(employerAccountForm.getPhoneNumber());
+        employer.setContactEmail(employerAccountForm.getContactEmail());
+
+        employerService.save(employer);
 
         return "index";
     }
