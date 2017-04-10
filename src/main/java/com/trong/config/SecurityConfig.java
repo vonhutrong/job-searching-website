@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/")
+                .successHandler(new LoginSuccessHandler())
                 .failureUrl("/dang-nhap?loi")
                 .and()
                 .logout().logoutUrl("/dang-xuat")
