@@ -8,8 +8,8 @@ import com.trong.model.User;
 import com.trong.service.EmployeeService;
 import com.trong.service.EmployerService;
 import com.trong.service.RoleService;
-import com.trong.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +21,6 @@ import java.util.HashSet;
 @RequestMapping("/")
 public class MainController {
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -32,10 +29,8 @@ public class MainController {
     @Autowired
     private EmployerService employerService;
 
-    @RequestMapping("/")
-    public String index() {
-        return "redirect:/nguoi-dung/dang-ky";
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/dang-ky/{accountType}")
     public String signUp(@PathVariable String accountType, Model model) {
@@ -53,8 +48,8 @@ public class MainController {
     public String signUp(@ModelAttribute EmployeeAccountForm employeeAccountForm) {
         User user = new User();
         user.setEmail(employeeAccountForm.getEmail());
-        user.setPassword(employeeAccountForm.getPassword());
-        user.setRoles(new HashSet<>(Arrays.asList(roleService.findFirstByName("ROLE_EMPLOYEE"))));
+        user.setPassword(passwordEncoder.encode(employeeAccountForm.getPassword()));
+        user.setRoles(new HashSet<>(Arrays.asList(roleService.findByName("ROLE_EMPLOYEE"))));
 
         Employee employee = new Employee();
         employee.setUser(user);
@@ -68,8 +63,8 @@ public class MainController {
     private String signUp(@ModelAttribute EmployerAccountForm employerAccountForm) {
         User user = new User();
         user.setEmail(employerAccountForm.getEmail());
-        user.setPassword(employerAccountForm.getPassword());
-        user.setRoles(new HashSet<>(Arrays.asList(roleService.findFirstByName("ROLE_EMPLOYER"))));
+        user.setPassword(passwordEncoder.encode(employerAccountForm.getPassword()));
+        user.setRoles(new HashSet<>(Arrays.asList(roleService.findByName("ROLE_EMPLOYER"))));
 
         Employer employer = new Employer();
         employer.setUser(user);
@@ -81,6 +76,21 @@ public class MainController {
 
         employerService.save(employer);
 
+        return "index";
+    }
+
+    @GetMapping("/403")
+    public String accessDenied() {
+        return "403";
+    }
+
+    @GetMapping("/dang-nhap")
+    public String loginPage() {
+        return "login";
+    }
+
+    @GetMapping("/")
+    public String index() {
         return "index";
     }
 }
