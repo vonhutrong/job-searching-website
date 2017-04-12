@@ -1,13 +1,70 @@
 package com.trong.controllers;
 
+import com.trong.form.RecruitmentForm;
+import com.trong.model.Department;
+import com.trong.model.EducationalLevel;
+import com.trong.model.Employer;
+import com.trong.model.Recruitment;
+import com.trong.service.DepartmentService;
+import com.trong.service.EducationalLevelService;
+import com.trong.service.EmployerService;
+import com.trong.service.RecruitmentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/nha-tuyen-dung")
 public class EmployerController {
-    @RequestMapping("/dang-tin")
-    public String publicRecruitment() {
+    @Autowired
+    private RecruitmentService recruitmentService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private EducationalLevelService educationalLevelService;
+
+    @Autowired
+    private EmployerService employerService;
+
+    @GetMapping("/dang-tin")
+    public String publicRecruitmentPage(Model model) {
+        model.addAttribute("recruitmentForm", new RecruitmentForm());
+        model.addAttribute("departments", departmentService.findAll());
+        model.addAttribute("educationalLevels", educationalLevelService.findAll());
         return "employer/public_recruitment";
+    }
+
+    @PostMapping("/dang-tin")
+    public String publicRecruitment(@ModelAttribute RecruitmentForm recruitmentForm, Principal principal) {
+        saveRecruitment(recruitmentForm, principal);
+        return "redirect:/nha-tuyen-dung/dang-tin";
+    }
+
+    private void saveRecruitment(RecruitmentForm recruitmentForm, Principal principal) {
+        Recruitment recruitment = new Recruitment();
+        recruitment.setTitle(recruitmentForm.getTitle());
+        recruitment.setContent(recruitmentForm.getContent());
+        recruitment.setRequiredFemale(recruitmentForm.getRequiredFemale());
+        recruitment.setAverageAge(recruitmentForm.getAverageAge());
+        recruitment.setYearsOfExperience(recruitmentForm.getYearsOfExperience());
+        recruitment.setCreatedDatetime(new java.util.Date());
+        recruitment.setLowestSalary(recruitmentForm.getLowestSalary());
+        recruitment.setHighestSalary(recruitmentForm.getHighestSalary());
+        recruitment.setDeadlineForSubmission(new java.sql.Date(recruitmentForm.getDeadlineForSubmission().getTime()));
+        Department department = departmentService.findById(recruitmentForm.getDepartmentId());
+        recruitment.setDepartment(department);
+        EducationalLevel educationalLevel = educationalLevelService.findById(recruitmentForm.getEducationalLevelId());
+        recruitment.setEducationalLevel(educationalLevel);
+        Employer employer = employerService.findByEmail(principal.getName());
+        recruitment.setEmployer(employer);
+        recruitmentService.save(recruitment);
     }
 }

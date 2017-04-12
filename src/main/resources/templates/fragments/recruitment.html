@@ -32,54 +32,55 @@
     </th:block>
 
     <th:block th:fragment="content">
-        <form>
+        <form action="#" th:action="@{/nha-tuyen-dung/dang-tin}" th:object="${recruitmentForm}" method="post">
             <div class="form-group">
                 <label>Tiêu đề</label>
-                <input class="form-control"/>
+                <input class="form-control" th:field="*{title}"/>
             </div>
             <div class="form-group">
                 <label>Nội dung</label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" th:field="*{content}"></textarea>
             </div>
             <div class="form-group">
                 <label>Mức lương</label>
                 <div class="form-group row">
-                    <div class="col-md-4"><input class="form-control"/></div>
+                    <div class="col-md-4"><input class="form-control" th:field="*{lowestSalary}"/></div>
                     <div class="col-md-2"><span> đến </span></div>
-                    <div class="col-md-4"><input class="form-control"/></div>
+                    <div class="col-md-4"><input class="form-control" th:field="*{highestSalary}"/></div>
                     <div class="col-md-2"><span> đồng</span></div>
                 </div>
-
             </div>
             <div class="form-group">
                 <label>Ngành nghề</label>
-                <select class="form-control">
-                    <option>Công nghệ thông tin</option>
+                <select class="form-control" th:field="*{departmentId}">
+                    <option th:each="i : ${departments}" th:value="${i.id}" th:text="${i.name}">Ngành nghề</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Trình độ</label>
-                <select class="form-control">
-                    <option>Đại học</option>
+                <select class="form-control" th:field="*{educationalLevelId}">
+                    <option th:each="i : ${educationalLevels}" th:value="${i.id}" th:text="${i.name}">Trình độ</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Giới tính</label>
-                <label class="radio-inline"><input type="radio"/>Nam</label>
-                <label class="radio-inline"><input type="radio"/>Nữ</label>
+                <label class="radio-inline"><input type="radio" th:field="*{requiredFemale}" th:value="false"/>Nam</label>
+                <label class="radio-inline"><input type="radio" th:field="*{requiredFemale}" th:value="true"/>Nữ</label>
             </div>
             <div class="form-group">
                 <label>Độ tuổi</label>
-                <select class="form-control">
-                    <option>18</option>
-                </select>
+                <input class="form-control" type="text" th:field="*{averageAge}"/>
+            </div>
+            <div class="form-group">
+                <label>Năm kinh nghiệm</label>
+                <input class="form-control" type="text" th:field="*{yearsOfExperience}"/>
             </div>
             <div class="form-group">
                 <label>Hạn nộp hồ sơ</label>
-                <input class="form-control"/>
+                <input class="form-control" type="text" th:field="*{deadlineForSubmission}"/>
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Nộp đơn</button>
             </div>
         </form>
     </th:block>
