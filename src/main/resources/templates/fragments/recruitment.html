@@ -34,50 +34,68 @@
     <th:block th:fragment="content">
         <form action="#" th:action="@{/nha-tuyen-dung/dang-tin}" th:object="${recruitmentForm}" method="post">
             <div class="form-group">
-                <label>Tiêu đề</label>
+                <label>Tiêu đề <span class="text-danger">*</span></label>
                 <input class="form-control" th:field="*{title}"/>
+                <div th:if="${#fields.hasErrors('title')}" class="text-danger">
+                    Cần nhập thông tin này
+                </div>
             </div>
             <div class="form-group">
-                <label>Nội dung</label>
+                <label>Nội dung <span class="text-danger">*</span></label>
                 <textarea class="form-control" th:field="*{content}"></textarea>
+                <div th:if="${#fields.hasErrors('content')}" class="text-danger">
+                    Cần nhập thông tin này
+                </div>
             </div>
             <div class="form-group">
-                <label>Mức lương</label>
+                <label>Mức lương <span class="text-danger">*</span></label>
                 <div class="form-group row">
                     <div class="col-md-4"><input class="form-control" th:field="*{lowestSalary}"/></div>
                     <div class="col-md-2"><span> đến </span></div>
                     <div class="col-md-4"><input class="form-control" th:field="*{highestSalary}"/></div>
                     <div class="col-md-2"><span> đồng</span></div>
                 </div>
+                <div th:if="${#fields.hasErrors('lowestSalary')}" class="text-danger">
+                    Số tiền không hợp lệ
+                </div>
             </div>
             <div class="form-group">
-                <label>Ngành nghề</label>
+                <label>Ngành nghề <span class="text-danger">*</span></label>
                 <select class="form-control" th:field="*{departmentId}">
                     <option th:each="i : ${departments}" th:value="${i.id}" th:text="${i.name}">Ngành nghề</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Trình độ</label>
+                <label>Trình độ <span class="text-danger">*</span></label>
                 <select class="form-control" th:field="*{educationalLevelId}">
                     <option th:each="i : ${educationalLevels}" th:value="${i.id}" th:text="${i.name}">Trình độ</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Giới tính</label>
+                <label>Giới tính (Để trống nếu không có yêu cầu cụ thể)</label>
                 <label class="radio-inline"><input type="radio" th:field="*{requiredFemale}" th:value="false"/>Nam</label>
                 <label class="radio-inline"><input type="radio" th:field="*{requiredFemale}" th:value="true"/>Nữ</label>
             </div>
             <div class="form-group">
-                <label>Độ tuổi</label>
+                <label>Độ tuổi <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" th:field="*{averageAge}"/>
+                <div th:if="${#fields.hasErrors('averageAge')}" class="text-danger">
+                    Độ tuổi thấp nhất là 16 tuổi
+                </div>
             </div>
             <div class="form-group">
-                <label>Năm kinh nghiệm</label>
+                <label>Năm kinh nghiệm <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" th:field="*{yearsOfExperience}"/>
+                <div th:if="${#fields.hasErrors('yearsOfExperience')}" class="text-danger">
+                    Số năm kinh nghiệm không hợp lệ
+                </div>
             </div>
             <div class="form-group">
-                <label>Hạn nộp hồ sơ</label>
+                <label>Hạn nộp hồ sơ <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" th:field="*{deadlineForSubmission}"/>
+                <div th:if="${#fields.hasErrors('deadlineForSubmission')}" class="text-danger">
+                    Cần chọn một ngày trong tương lai
+                </div>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Nộp đơn</button>

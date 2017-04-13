@@ -9,14 +9,18 @@ import com.trong.service.DepartmentService;
 import com.trong.service.EducationalLevelService;
 import com.trong.service.EmployerService;
 import com.trong.service.RecruitmentService;
+import com.trong.validator.RecruitmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -43,7 +47,16 @@ public class EmployerController {
     }
 
     @PostMapping("/dang-tin")
-    public String publicRecruitment(@ModelAttribute RecruitmentForm recruitmentForm, Principal principal) {
+    public String publicRecruitment(@ModelAttribute("recruitmentForm") @Valid RecruitmentForm recruitmentForm, BindingResult bindingResult, Principal principal, ModelMap model) {
+        RecruitmentValidator recruitmentValidator = new RecruitmentValidator();
+        recruitmentValidator.validate(recruitmentForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("recruitmentForm", recruitmentForm);
+            model.addAttribute("departments", departmentService.findAll());
+            model.addAttribute("educationalLevels", educationalLevelService.findAll());
+            return "employer/public_recruitment";
+        }
+
         saveRecruitment(recruitmentForm, principal);
         return "redirect:/nha-tuyen-dung/dang-tin";
     }
