@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragments/common::head" />
+    <th:block th:replace="fragments/common::head"/>
     <title>Trang chủ tìm kiếm việc làm</title>
 </head>
 <body>
 
     <div class="container">
-        <th:block th:include="fragments/employee::header"></th:block>
+        <th:block th:include="fragments/employee::header"/>
         <div class="row">
             <div class="col-lg-6 col-lg-offset-3">
-                <th:block th:include="fragments/employee::search"></th:block>
+                <th:block th:include="fragments/employee::search"/>
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-6 col-lg-offset-3">
-                <th:block th:include="fragments/recruitment::review"></th:block>
+                <th:block th:include="fragments/recruitment::review"/>
             </div>
         </div>
 
-        <th:block th:include="fragments/common::footer"></th:block>
+        <th:block th:include="fragments/common::footer"/>
     </div>
 
 </body>

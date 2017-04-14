@@ -5,6 +5,8 @@ import com.trong.repository.RecruitmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RecruitmentServiceImpl implements RecruitmentService {
     @Autowired
@@ -13,5 +15,10 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     @Override
     public void save(Recruitment recruitment) {
         recruitmentRepository.save(recruitment);
+    }
+
+    @Override
+    public List<Recruitment> recent() {
+        return recruitmentRepository.findAllByOrderByCreatedDatetimeAsc();
     }
 }

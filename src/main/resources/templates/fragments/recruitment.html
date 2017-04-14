@@ -5,14 +5,14 @@
 <body>
 
     <th:block th:fragment="review">
-        <div class="row">
+        <div th:each="recruitment : ${recentRecruitments}" class="row" style="padding-bottom: 1em">
             <div class="col-md-3">
                 <img src="#" width="100px" height="100px"/>
             </div>
             <div>
-                <span>Công ty ...</span><br/>
-                <span><i>Thời gian, lượt xem</i></span><br/>
-                <span>Nội dung ...</span>
+                <span th:text="${recruitment.employer.name}">Công ty ...</span><br/>
+                <span><i th:text="${#dates.format(recruitment.createdDatetime, 'hh:mm dd-MM-yyyy')}">Thời gian, lượt xem</i></span><br/>
+                <p th:text="${#strings.substring(recruitment.content, 0, #strings.length(recruitment.content) % 100)}">Nội dung ...</p>
             </div>
         </div>
     </th:block>
