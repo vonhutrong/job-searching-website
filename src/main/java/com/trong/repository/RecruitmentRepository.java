@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> {
     List<Recruitment> findAllByOrderByCreatedDatetimeAsc();
+    Recruitment findById(Long id);
 }

@@ -13,20 +13,24 @@
                 <span th:text="${recruitment.employer.name}">Công ty ...</span><br/>
                 <span><i th:text="${#dates.format(recruitment.createdDatetime, 'hh:mm dd-MM-yyyy')}">Thời gian, lượt xem</i></span><br/>
                 <p th:text="${#strings.substring(recruitment.content, 0, #strings.length(recruitment.content) % 100)}">Nội dung ...</p>
+                <a th:href="@{/tin-tuyen-dung/chi-tiet(id=${recruitment.id})}">Chi tiết</a>
             </div>
         </div>
     </th:block>
 
     <th:block th:fragment="details">
-        <span> (công việc) tại Công ty ...</span><br/>
-        <span>Địa chỉ</span><br/>
+        <span th:text="${recruitment.title}"> (công việc) tại Công ty ...</span><br/>
+        <span th:text="${recruitment.employer.address}">Địa chỉ</span><br/>
         Mô tả chi tiết công việc<br/>
-        <p>...</p>
+        <p th:text="${recruitment.content}">...</p>
         Kinh nghiệm/kỹ năng chi tiết<br/>
-        <p>...</p>
+        <div th:if="${recruitment.requiredFemale != null}">
+            <span th:if="${recruitment.requiredFemale == true}">Yêu cầu nữ</span>
+            <span th:if="${recruitment.requiredFemale == false}">Yêu cầu nam</span>
+        </div>
         Mô tả<br/>
         Thông tin liên hệ<br/>
-        Ngày gởi: ... Ngày hết hạn: ...<br/>
+        Ngày hết hạn: <span th:text="${#dates.format(recruitment.deadlineForSubmission, 'dd-MM-yyyy')}"/><br/>
         <button type="button" class="btn">Nộp đơn</button><br/>
         Tags: xxx, xxx
     </th:block>

@@ -21,4 +21,9 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     public List<Recruitment> recent() {
         return recruitmentRepository.findAllByOrderByCreatedDatetimeAsc();
     }
+
+    @Override
+    public Recruitment findById(Long id) {
+        return recruitmentRepository.findById(id);
+    }
 }

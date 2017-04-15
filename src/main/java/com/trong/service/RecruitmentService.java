@@ -7,4 +7,5 @@ import java.util.List;
 public interface RecruitmentService {
     void save(Recruitment recruitment);
     List<Recruitment> recent();
+    Recruitment findById(Long id);
 }
