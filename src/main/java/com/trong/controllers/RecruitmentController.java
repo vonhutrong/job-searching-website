@@ -23,7 +23,7 @@ public class RecruitmentController {
 
     @GetMapping("")
     private String view(Model model) {
-        model.addAttribute("recentRecruitments", recruitmentService.recent());
+        model.addAttribute("recruitments", recruitmentService.recent());
         model.addAttribute("departments", departmentService.findAll());
         model.addAttribute("searchForm", new SearchForm());
         return "employee/home";
@@ -37,6 +37,7 @@ public class RecruitmentController {
 
     @GetMapping("/tim-kiem")
     private String search(@ModelAttribute("searchForm") SearchForm searchForm, Model model) {
+        model.addAttribute("keyword", searchForm.getKeyword());
         model.addAttribute("recruitments", recruitmentService.searchBasic(searchForm.getKeyword(), searchForm.getDepartmentId()));
         return "employee/searching_result";
     }

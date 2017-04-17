@@ -29,6 +29,6 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Override
     public List<Recruitment> searchBasic(String keyword, Long departmentId) {
-        return recruitmentRepository.findByTitleContainingAndDepartmentIdOrderByCreatedDatetimeAsc(keyword, departmentId);
+        return recruitmentRepository.findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(keyword, departmentId);
     }
 }
