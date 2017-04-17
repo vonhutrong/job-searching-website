@@ -23,6 +23,8 @@ public class Employer {
     private String phoneNumber;
     @Column(name = "contact_email")
     private String contactEmail;
+    @Column(name = "logo_path")
+    private String logoPath;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;

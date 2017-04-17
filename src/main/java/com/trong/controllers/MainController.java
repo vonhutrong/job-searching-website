@@ -13,7 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -61,6 +65,8 @@ public class MainController {
 
     @PostMapping("/dang-ky/doanh-nghiep")
     private String signUp(@ModelAttribute EmployerAccountForm employerAccountForm) {
+        String logoPath = saveFile(employerAccountForm.getLogo(), employerAccountForm.getEmail());
+
         User user = new User();
         user.setEmail(employerAccountForm.getEmail());
         user.setPassword(passwordEncoder.encode(employerAccountForm.getPassword()));
@@ -73,10 +79,39 @@ public class MainController {
         employer.setAddress(employerAccountForm.getAddress());
         employer.setPhoneNumber(employerAccountForm.getPhoneNumber());
         employer.setContactEmail(employerAccountForm.getContactEmail());
+        employer.setLogoPath("");
 
-        employerService.save(employer);
+//        employerService.save(employer);
 
         return "index";
+    }
+
+    public String saveFile(MultipartFile file, String email) {
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+
+                // Creating the directory to store file
+                String rootPath = System.getProperty("catalina.home");
+                File dir = new File(rootPath + File.separator + email + File.separator);
+                if (!dir.exists())
+                    dir.mkdirs();
+
+                // Create the file on server
+                File serverFile = new File(dir.getAbsolutePath()
+                        + File.separator + email + File.separator + file.getOriginalFilename());
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(serverFile));
+                stream.write(bytes);
+                stream.close();
+
+                return serverFile.getAbsolutePath();
+            } catch (Exception e) {
+                return "You failed to upload " + file.getName() + " => " + e.getMessage();
+            }
+        } else {
+            return null;
+        }
     }
 
     @GetMapping("/403")

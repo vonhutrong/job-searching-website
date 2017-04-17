@@ -1,6 +1,7 @@
 package com.trong.form;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class EmployerAccountForm {
@@ -10,6 +11,7 @@ public class EmployerAccountForm {
 
     private String name;
     private String description;
+    private MultipartFile logo;
 
     private String address;
     private String phoneNumber;
