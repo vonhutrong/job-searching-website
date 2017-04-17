@@ -4,6 +4,34 @@
 </head>
 <body>
 
+    <th:block th:fragment="search">
+        <style>
+            .my-group .form-control{
+                width:45%;
+            }
+        </style>
+        <script>
+            /*if ( $.browser.webkit ) {
+                $(".my-group-button").css("height","+=1px");
+            }*/
+        </script>
+
+        <div class="input-group my-group">
+            <form action="#" th:action="@{/tin-tuyen-dung/tim-kiem}" th:object="${searchForm}" method="get">
+                <input type="text" class="form-control" name="snpid" placeholder="Test" th:field="*{keyword}"/>
+                <select class="selectpicker form-control" th:field="*{departmentId}">
+                    <option th:each="i : ${departments}" th:value="${i.id}" th:text="${i.name}">Ngành nghề</option>
+                </select>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </form>
+        </div>
+        <div class="text-right">
+            <a href="#">Tìm kiếm nâng cao</a>
+        </div>
+    </th:block>
+
     <th:block th:fragment="review">
         <div th:each="recruitment : ${recentRecruitments}" class="row" style="padding-bottom: 1em">
             <div class="col-md-3">
