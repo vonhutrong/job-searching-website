@@ -35,7 +35,7 @@
     <th:block th:fragment="review">
         <div th:each="recruitment : ${recruitments}" class="row" style="padding-bottom: 1em">
             <div class="col-md-3">
-                <img src="#" width="100px" height="100px"/>
+                <img th:src="@{/logo(logoPath=${recruitment.employer.logoPath})}" width="100px" height="100px"/>
             </div>
             <div>
                 <span th:text="${recruitment.employer.name}">Công ty ...</span><br/>
@@ -50,7 +50,8 @@
         <span th:text="${recruitment.title}"> (công việc) tại Công ty ...</span><br/>
         <span th:text="${recruitment.employer.address}">Địa chỉ</span><br/>
         Mô tả chi tiết công việc<br/>
-        <p th:text="${recruitment.content}">...</p>
+        <!--<p th:text="${recruitment.content}">...</p>-->
+        <p th:utext="${#strings.replace( #strings.escapeXml( recruitment.content ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}" ></p>
         Kinh nghiệm/kỹ năng chi tiết<br/>
         <div th:if="${recruitment.requiredFemale != null}">
             <span th:if="${recruitment.requiredFemale == true}">Yêu cầu nữ</span>

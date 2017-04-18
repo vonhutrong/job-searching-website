@@ -8,16 +8,22 @@ import com.trong.model.User;
 import com.trong.service.EmployeeService;
 import com.trong.service.EmployerService;
 import com.trong.service.RoleService;
+import com.trong.validator.EmployerAccountFormValidator;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -64,8 +70,13 @@ public class MainController {
     }
 
     @PostMapping("/dang-ky/doanh-nghiep")
-    private String signUp(@ModelAttribute EmployerAccountForm employerAccountForm) {
-        String logoPath = saveFile(employerAccountForm.getLogo(), employerAccountForm.getEmail());
+    private String signUp(@ModelAttribute("employerAccountForm") @Valid EmployerAccountForm employerAccountForm, BindingResult bindingResult, Model model, HttpServletRequest httpRequest) {
+        new EmployerAccountFormValidator().validate(employerAccountForm, bindingResult);
+        String realPath = httpRequest.getSession().getServletContext().getRealPath("/");
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("employerAccountForm", employerAccountForm);
+            return "employer/sign_up";
+        }
 
         User user = new User();
         user.setEmail(employerAccountForm.getEmail());
@@ -79,9 +90,9 @@ public class MainController {
         employer.setAddress(employerAccountForm.getAddress());
         employer.setPhoneNumber(employerAccountForm.getPhoneNumber());
         employer.setContactEmail(employerAccountForm.getContactEmail());
-        employer.setLogoPath("");
+        employer.setLogoPath(saveFile(employerAccountForm.getLogo(), employerAccountForm.getEmail()));
 
-//        employerService.save(employer);
+        employerService.save(employer);
 
         return "index";
     }
@@ -93,15 +104,14 @@ public class MainController {
 
                 // Creating the directory to store file
                 String rootPath = System.getProperty("catalina.home");
-                File dir = new File(rootPath + File.separator + email + File.separator);
+                File dir = new File(rootPath + File.separator + "files" + File.separator + email);
                 if (!dir.exists())
                     dir.mkdirs();
 
                 // Create the file on server
                 File serverFile = new File(dir.getAbsolutePath()
-                        + File.separator + email + File.separator + file.getOriginalFilename());
-                BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(serverFile));
+                        + File.separator + file.getOriginalFilename());
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
                 stream.write(bytes);
                 stream.close();
 
@@ -112,6 +122,20 @@ public class MainController {
         } else {
             return null;
         }
+    }
+
+    @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] getImageAsByteArray() throws IOException {
+        InputStream in = new FileInputStream(new File("C:\\Users\\trongvn13\\Desktop\\download.jpg"));
+        return IOUtils.toByteArray(in);
+    }
+
+    @GetMapping("/logo")
+    public void returnLogo(@Param("logoPath") String logoPath, HttpServletResponse response) throws IOException {
+        InputStream in = new FileInputStream(new File(logoPath));
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        org.apache.commons.io.IOUtils.copy(in, response.getOutputStream());
     }
 
     @GetMapping("/403")

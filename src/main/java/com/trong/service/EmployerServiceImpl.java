@@ -22,4 +22,9 @@ public class EmployerServiceImpl implements EmployerService {
     public Employer findByEmail(String email) {
         return employerRepository.findByUser(userService.findByEmail(email));
     }
+
+    @Override
+    public Employer findById(Long id) {
+        return employerRepository.findById(id);
+    }
 }
