@@ -1,6 +1,7 @@
 package com.trong.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Table(name = "employee")
 @Data
 @ToString(exclude = {"user", "applyHistories"})
+@EqualsAndHashCode(exclude = {"user", "applyHistories"})
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

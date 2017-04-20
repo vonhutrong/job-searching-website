@@ -32,7 +32,7 @@ public class RecruitmentController {
     @RequestMapping("/chi-tiet")
     public String details(@RequestParam("id") Long id, Model model) {
         model.addAttribute("recruitment", recruitmentService.findById(id));
-        return "employee/details";
+        return "recruitment/details";
     }
 
     @GetMapping("/tim-kiem")

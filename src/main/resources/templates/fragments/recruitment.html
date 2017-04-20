@@ -33,7 +33,7 @@
     </th:block>
 
     <th:block th:fragment="review">
-        <div th:each="recruitment : ${recruitments}" class="row" style="padding-bottom: 1em">
+        <div th:each="recruitment : ${recruitments}" style="padding-bottom: 1em">
             <div class="col-md-3">
                 <img th:src="@{/logo(logoPath=${recruitment.employer.logoPath})}" width="100px" height="100px"/>
             </div>
@@ -43,6 +43,12 @@
                 <p th:text="${#strings.substring(recruitment.content, 0, #strings.length(recruitment.content) % 100)}">Nội dung ...</p>
                 <a th:href="@{/tin-tuyen-dung/chi-tiet(id=${recruitment.id})}">Chi tiết</a>
             </div>
+        </div>
+    </th:block>
+
+    <th:block th:fragment="review-apply">
+        <div class="well" th:each="applyHistory : ${recruitment.applyHistories}" style="padding-bottom: 1em">
+            <span th:text="${applyHistory.employee.name}"></span> - Lúc: <span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"></span>
         </div>
     </th:block>
 

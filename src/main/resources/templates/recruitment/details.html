@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:replace="fragments/common::head"/>
+    <title>Chi tiết công việc</title>
+</head>
+<body>
+
+    <div class="container">
+        <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
+            <th:block th:include="fragments/employee::header"/>
+        </div>
+        <div sec:authorize="hasRole('ROLE_EMPLOYER')">
+            <th:block th:include="fragments/employer::header"/>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3">
+                <th:block th:include="fragments/recruitment::details"/>
+            </div>
+        </div>
+
+        <br/>
+
+        <div sec:authorize="hasRole('ROLE_EMPLOYER')">
+            <div class="row text-left">
+                <div class="col-lg-6 col-lg-offset-3">
+                    <label>Danh sách người nộp đơn:</label>
+                    <th:block th:include="fragments/recruitment::review-apply"/>
+                </div>
+            </div>
+        </div>
+        <th:block th:include="fragments/common::footer"/>
+    </div>
+
+</body>
+</html>

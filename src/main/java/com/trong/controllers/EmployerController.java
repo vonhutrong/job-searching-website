@@ -61,6 +61,12 @@ public class EmployerController {
         return "redirect:/nha-tuyen-dung/dang-tin";
     }
 
+    @GetMapping("/quan-ly-tin")
+    public String manageRecruitment(Model model, Principal principal) {
+        model.addAttribute("recruitments", recruitmentService.findByEmployer(employerService.findByEmail(principal.getName())));
+        return "employer/recruitment_manage";
+    }
+
     private void saveRecruitment(RecruitmentForm recruitmentForm, Principal principal) {
         Recruitment recruitment = new Recruitment();
         recruitment.setTitle(recruitmentForm.getTitle());

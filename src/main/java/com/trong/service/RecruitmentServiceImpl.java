@@ -1,5 +1,6 @@
 package com.trong.service;
 
+import com.trong.model.Employer;
 import com.trong.model.Recruitment;
 import com.trong.repository.RecruitmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,10 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     @Override
     public List<Recruitment> searchBasic(String keyword, Long departmentId) {
         return recruitmentRepository.findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(keyword, departmentId);
+    }
+
+    @Override
+    public List<Recruitment> findByEmployer(Employer employer) {
+        return recruitmentRepository.findByEmployerOrderByCreatedDatetimeAsc(employer);
     }
 }
