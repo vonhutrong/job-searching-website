@@ -16,6 +16,7 @@ public class ApplyHistory {
     @Column(name = "cv_path ")
     private String cvPath;
     private java.util.Date datetime;
+    private Boolean approved;
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;

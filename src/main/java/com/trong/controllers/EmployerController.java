@@ -1,16 +1,11 @@
 package com.trong.controllers;
 
 import com.trong.form.RecruitmentForm;
-import com.trong.model.Department;
-import com.trong.model.EducationalLevel;
-import com.trong.model.Employer;
-import com.trong.model.Recruitment;
-import com.trong.service.DepartmentService;
-import com.trong.service.EducationalLevelService;
-import com.trong.service.EmployerService;
-import com.trong.service.RecruitmentService;
+import com.trong.model.*;
+import com.trong.service.*;
 import com.trong.validator.RecruitmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -37,6 +32,9 @@ public class EmployerController {
 
     @Autowired
     private EmployerService employerService;
+
+    @Autowired
+    private ApplyHistoryService applyHistoryService;
 
     @GetMapping("/dang-tin")
     public String publicRecruitmentPage(Model model) {
@@ -65,6 +63,14 @@ public class EmployerController {
     public String manageRecruitment(Model model, Principal principal) {
         model.addAttribute("recruitments", recruitmentService.findByEmployer(employerService.findByEmail(principal.getName())));
         return "employer/recruitment_manage";
+    }
+
+    @GetMapping("/cap-nhat-ho-so")
+    public String updateApplyHistory(@Param("applyHistoryId") Long applyHistoryId, @Param("approved") Boolean approved) {
+        ApplyHistory applyHistory = applyHistoryService.findById(applyHistoryId);
+        applyHistory.setApproved(approved);
+        applyHistoryService.save(applyHistory);
+        return "redirect:/nha-tuyen-dung/dang-tin";
     }
 
     private void saveRecruitment(RecruitmentForm recruitmentForm, Principal principal) {
