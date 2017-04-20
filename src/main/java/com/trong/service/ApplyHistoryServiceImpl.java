@@ -14,4 +14,9 @@ public class ApplyHistoryServiceImpl implements ApplyHistoryService {
     public void save(ApplyHistory applyHistory) {
         applyHistoryRepository.save(applyHistory);
     }
+
+    @Override
+    public ApplyHistory findById(Long id) {
+        return applyHistoryRepository.findById(id);
+    }
 }

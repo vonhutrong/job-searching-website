@@ -49,6 +49,7 @@
     <th:block th:fragment="review-apply">
         <div class="well" th:each="applyHistory : ${recruitment.applyHistories}" style="padding-bottom: 1em">
             <span th:text="${applyHistory.employee.name}"></span> - Lúc: <span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"></span>
+            <a th:href="@{/tin-tuyen-dung/tai-xuong(applyHistoryId=${applyHistory.id})}">Đơn xin việc</a>
         </div>
     </th:block>
 
