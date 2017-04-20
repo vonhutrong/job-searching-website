@@ -97,7 +97,7 @@ public class MainController {
         return "index";
     }
 
-    public String saveFile(MultipartFile file, String email) {
+    public static String saveFile(MultipartFile file, String email) {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();

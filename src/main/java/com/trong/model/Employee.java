@@ -4,11 +4,12 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "employee")
 @Data
-@ToString
+@ToString(exclude = {"user", "applyHistories"})
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,4 +18,6 @@ public class Employee {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+    @OneToMany(mappedBy = "employee")
+    private Set<ApplyHistory> applyHistories;
 }

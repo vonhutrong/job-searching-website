@@ -61,7 +61,7 @@
         Thông tin liên hệ<br/>
         Ngày hết hạn: <span th:text="${#dates.format(recruitment.deadlineForSubmission, 'dd-MM-yyyy')}"/><br/>
         <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
-            <button type="button" class="btn btn-primary">Nộp đơn</button><br/>
+            <a class="btn btn-primary" th:href="@{/nguoi-dung/nop-don(recruitmentId=${recruitment.id})}">Nộp đơn</a><br/>
         </div>
         Tags: xxx, xxx
     </th:block>

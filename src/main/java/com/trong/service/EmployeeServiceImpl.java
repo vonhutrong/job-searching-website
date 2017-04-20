@@ -9,9 +9,16 @@ import org.springframework.stereotype.Service;
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private UserService userService;
 
     @Override
     public void save(Employee employee) {
         employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee findByEmail(String email) {
+        return employeeRepository.findByUser(userService.findByEmail(email));
     }
 }

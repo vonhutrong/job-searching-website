@@ -5,12 +5,13 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "recruitment")
 @Data
 @ToString
-@EqualsAndHashCode(exclude = {"department", "educationalLevel", "employer"})
+@EqualsAndHashCode(exclude = {"department", "educationalLevel", "employer", "applyHistories"})
 public class Recruitment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,4 +42,6 @@ public class Recruitment {
     @ManyToOne
     @JoinColumn(name = "employer_id")
     private Employer employer;
+    @OneToMany(mappedBy = "recruitment")
+    private Set<ApplyHistory> applyHistories;
 }

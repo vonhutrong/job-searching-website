@@ -4,4 +4,5 @@ import com.trong.model.Employee;
 
 public interface EmployeeService {
     void save(Employee employee);
+    Employee findByEmail(String email);
 }
