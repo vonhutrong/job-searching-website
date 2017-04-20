@@ -91,6 +91,12 @@ public class EmployeeController {
         return "redirect:/tin-tuyen-dung";
     }
 
+    @GetMapping("/quan-ly-ho-so")
+    public String manageApply(Principal principal, Model model) {
+        model.addAttribute("applyHistories", applyHistoryService.findByEmployee(employeeService.findByEmail(principal.getName())));
+        return "employee/apply_management";
+    }
+
     private String saveCv(MultipartFile cv, String email) {
         return MainController.saveFile(cv, email);
     }
