@@ -33,7 +33,7 @@
     </th:block>
 
     <th:block th:fragment="review">
-        <div th:each="recruitment : ${recruitments}" style="padding-bottom: 1em">
+        <div th:each="recruitment : ${page.content}" style="padding-bottom: 1em">
             <div class="col-md-3">
                 <img th:src="@{/logo(logoPath=${recruitment.employer.logoPath})}" width="100px" height="100px"/>
             </div>

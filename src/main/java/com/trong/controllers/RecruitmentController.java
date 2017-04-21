@@ -2,11 +2,15 @@ package com.trong.controllers;
 
 import com.trong.form.SearchForm;
 import com.trong.model.ApplyHistory;
+import com.trong.model.Recruitment;
 import com.trong.service.ApplyHistoryService;
 import com.trong.service.DepartmentService;
 import com.trong.service.RecruitmentService;
+import com.trong.util.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,18 +28,22 @@ import java.io.InputStream;
 @RequestMapping("/tin-tuyen-dung")
 public class RecruitmentController {
 
-    @Autowired
-    private RecruitmentService recruitmentService;
+    private final RecruitmentService recruitmentService;
+    private final DepartmentService departmentService;
+    private final ApplyHistoryService applyHistoryService;
 
     @Autowired
-    private DepartmentService departmentService;
-
-    @Autowired
-    private ApplyHistoryService applyHistoryService;
+    public RecruitmentController(RecruitmentService recruitmentService, DepartmentService departmentService, ApplyHistoryService applyHistoryService) {
+        this.recruitmentService = recruitmentService;
+        this.departmentService = departmentService;
+        this.applyHistoryService = applyHistoryService;
+    }
 
     @GetMapping("")
-    private String view(Model model) {
-        model.addAttribute("recruitments", recruitmentService.recent());
+    public String viewWithPagination(@PageableDefault(size = 5) Pageable pageable, Model model) {
+        model.addAttribute("page", new PageWrapper<Recruitment>(
+                recruitmentService.recent(pageable),
+                "/tin-tuyen-dung"));
         model.addAttribute("departments", departmentService.findAll());
         model.addAttribute("searchForm", new SearchForm());
         return "employee/home";
@@ -48,7 +56,7 @@ public class RecruitmentController {
     }
 
     @GetMapping("/tim-kiem")
-    private String search(@ModelAttribute("searchForm") SearchForm searchForm, Model model) {
+    public String search(@ModelAttribute("searchForm") SearchForm searchForm, Model model) {
         model.addAttribute("keyword", searchForm.getKeyword());
         model.addAttribute("recruitments", recruitmentService.searchBasic(searchForm.getKeyword(), searchForm.getDepartmentId()));
         return "employee/searching_result";
@@ -60,7 +68,7 @@ public class RecruitmentController {
     }
 
     @GetMapping("/tai-xuong")
-    private void downloadCv(@Param("applyHistoryId") Long applyHistoryId,
+    public void downloadCv(@Param("applyHistoryId") Long applyHistoryId,
                             HttpServletResponse response) {
         try {
             ApplyHistory applyHistory = applyHistoryService.findById(applyHistoryId);
