@@ -15,4 +15,5 @@ public interface RecruitmentService {
     List<Recruitment> findByEmployer(Employer employer);
 
     Page<Recruitment> recent(Pageable pageable);
+    Page<Recruitment> searchBasic(String keyword, Long departmentId, Pageable pageable);
 }

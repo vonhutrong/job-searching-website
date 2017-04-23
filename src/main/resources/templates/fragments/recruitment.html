@@ -1,48 +1,53 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 </head>
 <body>
 
     <th:block th:fragment="search">
-        <style>
-            .my-group .form-control{
-                width:45%;
-            }
-        </style>
-        <script>
-            /*if ( $.browser.webkit ) {
-                $(".my-group-button").css("height","+=1px");
-            }*/
-        </script>
-
-        <div class="input-group my-group">
-            <form action="#" th:action="@{/tin-tuyen-dung/tim-kiem}" th:object="${searchForm}" method="get">
-                <input type="text" class="form-control" name="snpid" placeholder="Test" th:field="*{keyword}"/>
-                <select class="selectpicker form-control" th:field="*{departmentId}">
-                    <option th:each="i : ${departments}" th:value="${i.id}" th:text="${i.name}">Ngành nghề</option>
-                </select>
+        <form action="#" th:action="@{/recruitment/search}" th:object="${searchForm}" method="get">
+            <div class="input-group">
+                <input th:field="*{keyword}" type="text" class="form-control" aria-label="..."/>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" style="border-radius: 0; border-left: 0;">
+                        <span id="selected-value">Ngành nghề</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li th:each="i : ${departments}"><a th:id="${i.id}" class="department" href="#"><span th:text="${i.name}"></span></a></li>
+                    </ul>
+                </div>
+                <input id="department-id" type="hidden" th:value="0" th:attr="name='departmentId'"/>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"/> Tìm</button>
                 </span>
-            </form>
-        </div>
+            </div>
+            <script>
+                jQuery(document).ready(function () {
+                    $(".department").click(function () {
+                        var selectedValue = $(this).text();
+                        $("#selected-value").text(selectedValue);
+                        $("#department-id").val($(this).attr("id"));
+                    });
+                });
+            </script>
+        </form>
         <div class="text-right">
             <a href="#">Tìm kiếm nâng cao</a>
         </div>
     </th:block>
 
     <th:block th:fragment="review">
-        <div th:each="recruitment : ${page.content}" style="padding-bottom: 1em">
-            <div class="col-md-3">
-                <img th:src="@{/logo(logoPath=${recruitment.employer.logoPath})}" width="100px" height="100px"/>
+        <div th:each="recruitment : ${page.content}" class="row" style="padding-bottom: 1em">
+            <div class="col-md-2">
+                <img th:src="@{/logo(logoPath=${recruitment.employer.logoPath})}" width="100em" height="100em"/>
             </div>
             <div>
-                <span th:text="${recruitment.employer.name}">Công ty ...</span><br/>
-                <span><i th:text="${#dates.format(recruitment.createdDatetime, 'hh:mm dd-MM-yyyy')}">Thời gian, lượt xem</i></span><br/>
-                <p th:text="${#strings.substring(recruitment.content, 0, #strings.length(recruitment.content) % 100)}">Nội dung ...</p>
-                <a th:href="@{/tin-tuyen-dung/chi-tiet(id=${recruitment.id})}">Chi tiết</a>
+                <b class="text-uppercase" th:text="${recruitment.employer.name}">Công việc</b><br/>
+                Thời gian đăng: <i th:text="${#dates.format(recruitment.createdDatetime, 'hh:mm dd-MM-yyyy')}"/><br/>
+                <p class="text-capitalize" th:text="${recruitment.title}"/>
+                <a th:href="@{/recruitment/details(id=${recruitment.id})}">Chi tiết</a>
             </div>
+            <hr/>
         </div>
     </th:block>
 
@@ -63,23 +68,35 @@
     </th:block>
 
     <th:block th:fragment="details">
-        <span th:text="${recruitment.title}"> (công việc) tại Công ty ...</span><br/>
-        <span th:text="${recruitment.employer.address}">Địa chỉ</span><br/>
-        Mô tả chi tiết công việc<br/>
-        <!--<p th:text="${recruitment.content}">...</p>-->
+        <p><h4 class="text-uppercase" th:text="${recruitment.employer.name}">Công ty</h4>
+            <label th:text="${recruitment.title}">Công việc</label><br/>
+            <i><span th:text="${recruitment.employer.address}">Địa chỉ</span></i></p><br/>
+        <b>Mô tả chi tiết công việc</b><br/>
         <p th:utext="${#strings.replace( #strings.escapeXml( recruitment.content ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}" ></p>
-        Kinh nghiệm/kỹ năng chi tiết<br/>
-        <div th:if="${recruitment.requiredFemale != null}">
-            <span th:if="${recruitment.requiredFemale == true}">Yêu cầu nữ</span>
-            <span th:if="${recruitment.requiredFemale == false}">Yêu cầu nam</span>
+
+        <b>Mức lương: </b>
+        <span th:text="${#numbers.formatDecimal(recruitment.lowestSalary, 0, 'COMMA', 0, 'POINT')}"/> đến
+        <span th:text="${#numbers.formatDecimal(recruitment.highestSalary, 0, 'COMMA', 0, 'POINT')}"/> đồng<br/>
+        <br/>
+
+        <b>Kinh nghiệm/kỹ năng chi tiết</b><br/>
+        - Số năm kinh nghiệm: <span th:text="${#numbers.formatDecimal(recruitment.yearsOfExperience, 0, 0)}"/> năm <br/>
+        - Giới tính: <span th:text="${recruitment.requiredFemale} == null ? 'Nam/Nữ' : (${recruitment.requiredFemale} ? 'Nữ' : 'Nam')"/><br/>
+        - Trình độ học vấn: <span th:text="${recruitment.educationalLevel.name}"/><br/>
+        - Độ tuổi: <span th:text="${recruitment.averageAge}"/><br/>
+        <br/>
+
+        <b>Thông tin liên hệ</b><br/>
+        - Số điện thoại: <span th:text="${recruitment.employer.phoneNumber}"/><br/>
+        - Email: <span th:text="${recruitment.employer.contactEmail}"/><br/>
+        <br/>
+
+        <b>Hạn nộp hồ sơ: </b><i th:text="${#dates.format(recruitment.deadlineForSubmission, 'dd-MM-yyyy')}"/><br/>
+        <br/>
+
+        <div class="text-center">
+            <a class="btn btn-primary" th:href="@{/nguoi-dung/nop-don(recruitmentId=${recruitment.id})}">Nộp đơn</a>
         </div>
-        Mô tả<br/>
-        Thông tin liên hệ<br/>
-        Ngày hết hạn: <span th:text="${#dates.format(recruitment.deadlineForSubmission, 'dd-MM-yyyy')}"/><br/>
-        <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
-            <a class="btn btn-primary" th:href="@{/nguoi-dung/nop-don(recruitmentId=${recruitment.id})}">Nộp đơn</a><br/>
-        </div>
-        Tags: xxx, xxx
     </th:block>
 
     <th:block th:fragment="content">

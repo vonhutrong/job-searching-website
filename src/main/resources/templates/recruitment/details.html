@@ -7,20 +7,16 @@
 <body>
 
     <div class="container">
-        <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
-            <th:block th:include="fragments/employee::header"/>
-        </div>
-        <div sec:authorize="hasRole('ROLE_EMPLOYER')">
-            <th:block th:include="fragments/employer::header"/>
-        </div>
+        <th:block th:include="fragments/common::header"/>
         <div class="row">
-            <div class="col-lg-6 col-lg-offset-3">
-                <th:block th:include="fragments/recruitment::details"/>
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="well">
+                    <th:block th:include="fragments/recruitment::details"/>
+                </div>
             </div>
         </div>
 
         <br/>
-
         <div sec:authorize="hasRole('ROLE_EMPLOYER')">
             <div class="row text-left">
                 <div class="col-lg-6 col-lg-offset-3">

@@ -20,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
@@ -30,32 +29,38 @@ import java.util.HashSet;
 @Controller
 @RequestMapping("/")
 public class MainController {
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
+    private final EmployeeService employeeService;
+    private final EmployerService employerService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private EmployeeService employeeService;
+    public MainController(RoleService roleService, EmployeeService employeeService, EmployerService employerService, PasswordEncoder passwordEncoder) {
+        this.roleService = roleService;
+        this.employeeService = employeeService;
+        this.employerService = employerService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Autowired
-    private EmployerService employerService;
+    @GetMapping("/")
+    public String index() {
+        return "redirect:/recruitment";
+    }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @GetMapping("/dang-ky/{accountType}")
+    @GetMapping("/register/{accountType}")
     public String signUp(@PathVariable String accountType, Model model) {
-        if ("nguoi-dung".equals(accountType)) {
+        if ("employee".equals(accountType)) {
             model.addAttribute("employeeAccountForm", new EmployeeAccountForm());
-            return "employee/sign_up";
-        } else if ("doanh-nghiep".equals(accountType)) {
+            return "employee/register";
+        } else if ("employer".equals(accountType)) {
             model.addAttribute("employerAccountForm", new EmployerAccountForm());
-            return "employer/sign_up";
+            return "employer/register";
         }
-        return "index";
+        return "redirect:/";
     }
 
     @PostMapping("/dang-ky/nguoi-dung")
-    public String signUp(@ModelAttribute EmployeeAccountForm employeeAccountForm) {
+    public String signUp(@ModelAttribute("employeeAccountForm") @Valid EmployeeAccountForm employeeAccountForm, BindingResult bindingResult, Model model) {
         User user = new User();
         user.setEmail(employeeAccountForm.getEmail());
         user.setPassword(passwordEncoder.encode(employeeAccountForm.getPassword()));
@@ -66,16 +71,15 @@ public class MainController {
         employee.setName(employeeAccountForm.getName());
         employeeService.save(employee);
 
-        return "index";
+        return "redirect:/login";
     }
 
     @PostMapping("/dang-ky/doanh-nghiep")
-    private String signUp(@ModelAttribute("employerAccountForm") @Valid EmployerAccountForm employerAccountForm, BindingResult bindingResult, Model model, HttpServletRequest httpRequest) {
+    private String signUp(@ModelAttribute("employerAccountForm") @Valid EmployerAccountForm employerAccountForm, BindingResult bindingResult, Model model) {
         new EmployerAccountFormValidator().validate(employerAccountForm, bindingResult);
-        String realPath = httpRequest.getSession().getServletContext().getRealPath("/");
         if (bindingResult.hasErrors()) {
             model.addAttribute("employerAccountForm", employerAccountForm);
-            return "employer/sign_up";
+            return "employer/register";
         }
 
         User user = new User();
@@ -94,7 +98,7 @@ public class MainController {
 
         employerService.save(employer);
 
-        return "index";
+        return "redirect:/login";
     }
 
     public static String saveFile(MultipartFile file, String email) {
@@ -143,13 +147,8 @@ public class MainController {
         return "403";
     }
 
-    @GetMapping("/dang-nhap")
+    @GetMapping("/login")
     public String loginPage() {
         return "login";
-    }
-
-    @GetMapping("/")
-    public String index() {
-        return "index";
     }
 }

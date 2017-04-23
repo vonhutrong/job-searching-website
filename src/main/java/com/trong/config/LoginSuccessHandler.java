@@ -52,7 +52,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         if (isEmployee) {
-            return "/tin-tuyen-dung";
+            return "/recruitment";
         } else if (isEmployer) {
             return "/nha-tuyen-dung/dang-tin";
         } else {

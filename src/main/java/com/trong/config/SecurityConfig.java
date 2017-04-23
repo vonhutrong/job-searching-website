@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/nha-tuyen-dung/**").hasRole("EMPLOYER")
                 .and()
                 .formLogin()
-                .loginPage("/dang-nhap")
+                .loginPage("/login")
                 .loginProcessingUrl("/xu-ly-dang-nhap")
                 .usernameParameter("email")
                 .passwordParameter("password")

@@ -8,6 +8,7 @@ import com.trong.service.DepartmentService;
 import com.trong.service.RecruitmentService;
 import com.trong.util.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
@@ -25,7 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Controller
-@RequestMapping("/tin-tuyen-dung")
+@RequestMapping("/recruitment")
 public class RecruitmentController {
 
     private final RecruitmentService recruitmentService;
@@ -33,7 +34,9 @@ public class RecruitmentController {
     private final ApplyHistoryService applyHistoryService;
 
     @Autowired
-    public RecruitmentController(RecruitmentService recruitmentService, DepartmentService departmentService, ApplyHistoryService applyHistoryService) {
+    public RecruitmentController(RecruitmentService recruitmentService,
+                                 DepartmentService departmentService,
+                                 ApplyHistoryService applyHistoryService) {
         this.recruitmentService = recruitmentService;
         this.departmentService = departmentService;
         this.applyHistoryService = applyHistoryService;
@@ -41,33 +44,30 @@ public class RecruitmentController {
 
     @GetMapping("")
     public String viewWithPagination(@PageableDefault(size = 5) Pageable pageable, Model model) {
-        model.addAttribute("page", new PageWrapper<Recruitment>(
-                recruitmentService.recent(pageable),
-                "/tin-tuyen-dung"));
+        model.addAttribute("page", new PageWrapper<Recruitment>(recruitmentService.recent(pageable),"/recruitment"));
         model.addAttribute("departments", departmentService.findAll());
         model.addAttribute("searchForm", new SearchForm());
-        return "employee/home";
+        return "recruitment/home";
     }
 
-    @RequestMapping("/chi-tiet")
+    @RequestMapping("/details")
     public String details(@RequestParam("id") Long id, Model model) {
         model.addAttribute("recruitment", recruitmentService.findById(id));
         return "recruitment/details";
     }
 
-    @GetMapping("/tim-kiem")
-    public String search(@ModelAttribute("searchForm") SearchForm searchForm, Model model) {
+    @GetMapping("/search")
+    public String search(@PageableDefault(size = 5) Pageable pageable,
+                         @ModelAttribute("searchForm") SearchForm searchForm,
+                         Model model) {
         model.addAttribute("keyword", searchForm.getKeyword());
-        model.addAttribute("recruitments", recruitmentService.searchBasic(searchForm.getKeyword(), searchForm.getDepartmentId()));
-        return "employee/searching_result";
+        Page<Recruitment> recruitments = recruitmentService.searchBasic(searchForm.getKeyword(), searchForm.getDepartmentId(), pageable);
+        String url = String.format("/recruitment/search?keyword=%s&departmentId=%s", searchForm.getKeyword(), searchForm.getDepartmentId());
+        model.addAttribute("page", new PageWrapper<Recruitment>(recruitments, url));
+        return "recruitment/searching_result";
     }
 
-    @RequestMapping("/ket-qua-tim-kiem")
-    public String searchingResult() {
-        return "employee/searching_result";
-    }
-
-    @GetMapping("/tai-xuong")
+    @GetMapping("/cv")
     public void downloadCv(@Param("applyHistoryId") Long applyHistoryId,
                             HttpServletResponse response) {
         try {

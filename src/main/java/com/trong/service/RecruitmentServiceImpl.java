@@ -48,4 +48,9 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     public Page<Recruitment> recent(Pageable pageable) {
         return recruitmentRepository.findAllByOrderByCreatedDatetimeAsc(pageable);
     }
+
+    @Override
+    public Page<Recruitment> searchBasic(String keyword, Long departmentId, Pageable pageable) {
+        return recruitmentRepository.findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(keyword, departmentId, pageable);
+    }
 }

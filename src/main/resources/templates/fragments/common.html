@@ -1,19 +1,49 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <th:block th:fragment="head">
         <link rel="stylesheet" href="../../public/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
-        <script src="../../public/js/jquery-3.2.0.min.js" th:src="@{/js/jquery-3.2.0.min.js}"></script>
-        <script src="../../public/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+        <script src="../../public/js/jquery-3.2.0.min.js" th:src="@{/js/jquery-3.2.0.min.js}"/>
+        <script src="../../public/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"/>
     </th:block>
 </head>
 <body>
+
+    <th:block th:fragment="header">
+        <div sec:authorize="isAnonymous()">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" th:href="@{/}">Tìm việc trực tuyến</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li><a th:href="@{/recruitment}">Trang chủ</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-lock"/> Đăng ký <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a th:href="@{/register/employee}"><span class="glyphicon glyphicon-user"/> Tài khoản cá nhân</a></li>
+                                <li><a th:href="@{/register/employer}"><span class="glyphicon glyphicon-briefcase"/> Tài khoản danh nghiệp</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"/> Đăng nhập</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
+            <th:block th:include="fragments/employee::header"/>
+        </div>
+        <div sec:authorize="hasRole('ROLE_EMPLOYER')">
+        </div>
+    </th:block>
 
     <th:block th:fragment="pagination">
         <div class="text-center">
             <ul class='pagination pagination-centered'>
                 <li th:class="${page.firstPage}? 'disabled' : ''">
-                    <span th:if="${page.firstPage}">← First</span>
+                    <span th:if="${page.firstPage}">← Trang đầu</span>
                     <a th:if="${not page.firstPage}" th:href="@{${page.url}(page=0,size=${page.size})}">← Trang đầu</a>
                 </li>
                 <li th:class="${page.hasPreviousPage}? '' : 'disabled'">
@@ -29,7 +59,7 @@
                     <a th:if="${page.hasNextPage}" th:href="@{${page.url}(page=${page.number},size=${page.size})}" title='Go to next page'>»</a>
                 </li>
                 <li th:class="${page.lastPage}? 'disabled' : ''">
-                    <span th:if="${page.lastPage}">Last →</span>
+                    <span th:if="${page.lastPage}">Trang cuối →</span>
                     <a th:if="${not page.lastPage}" th:href="@{${page.url}(page=${page.totalPages - 1},size=${page.size})}">Trang cuối →</a>
                 </li>
             </ul>
