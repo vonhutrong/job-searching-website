@@ -59,7 +59,7 @@ public class MainController {
         return "redirect:/";
     }
 
-    @PostMapping("/dang-ky/nguoi-dung")
+    @PostMapping("/register/employee")
     public String register(@ModelAttribute("employeeAccountForm") @Valid EmployeeAccountForm employeeAccountForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("employeeAccountForm", employeeAccountForm);

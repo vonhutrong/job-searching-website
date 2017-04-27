@@ -1,6 +1,5 @@
 package com.trong.model;
 
-import com.trong.validation.annotation.UniqueEmail;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -16,7 +15,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @UniqueEmail
     @NotEmpty
     private String email;
     private String password;
