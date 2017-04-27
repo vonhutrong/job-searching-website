@@ -1,4 +1,4 @@
-package com.trong.validator;
+package com.trong.validation;
 
 import com.trong.form.RecruitmentForm;
 import org.springframework.validation.Errors;

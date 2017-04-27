@@ -1,4 +1,4 @@
-package com.trong.validator;
+package com.trong.validation;
 
 import com.trong.model.User;
 import com.trong.service.UserService;

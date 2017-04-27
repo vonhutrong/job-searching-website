@@ -8,7 +8,7 @@ import com.trong.model.User;
 import com.trong.service.EmployeeService;
 import com.trong.service.EmployerService;
 import com.trong.service.RoleService;
-import com.trong.validator.EmployerAccountFormValidator;
+import com.trong.validation.EmployerAccountFormValidator;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -48,7 +48,7 @@ public class MainController {
     }
 
     @GetMapping("/register/{accountType}")
-    public String signUp(@PathVariable String accountType, Model model) {
+    public String register(@PathVariable String accountType, Model model) {
         if ("employee".equals(accountType)) {
             model.addAttribute("employeeAccountForm", new EmployeeAccountForm());
             return "employee/register";
@@ -60,7 +60,12 @@ public class MainController {
     }
 
     @PostMapping("/dang-ky/nguoi-dung")
-    public String signUp(@ModelAttribute("employeeAccountForm") @Valid EmployeeAccountForm employeeAccountForm, BindingResult bindingResult, Model model) {
+    public String register(@ModelAttribute("employeeAccountForm") @Valid EmployeeAccountForm employeeAccountForm, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("employeeAccountForm", employeeAccountForm);
+            return "employee/register";
+        }
+
         User user = new User();
         user.setEmail(employeeAccountForm.getEmail());
         user.setPassword(passwordEncoder.encode(employeeAccountForm.getPassword()));

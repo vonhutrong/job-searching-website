@@ -3,7 +3,7 @@ package com.trong.controllers;
 import com.trong.form.RecruitmentForm;
 import com.trong.model.*;
 import com.trong.service.*;
-import com.trong.validator.RecruitmentValidator;
+import com.trong.validation.RecruitmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;

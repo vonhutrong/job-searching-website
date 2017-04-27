@@ -10,18 +10,22 @@
             <div class="form-group">
                 <label>Họ và tên</label>
                 <input class="form-control" type="text" th:field="*{name}"/>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">email</span>
             </div>
             <div class="form-group">
                 <label>Email</label>
                 <input class="form-control" type="text" th:field="*{email}"/>
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email</span>
             </div>
             <div class="form-group">
                 <label>Mật khẩu</label>
                 <input class="form-control" type="password" th:field="*{password}"/>
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password</span>
             </div>
             <div class="form-group">
                 <label>Gõ lại mật khẩu</label>
                 <input class="form-control" type="password" th:field="*{passwordConfirm}"/>
+                <span th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">passwordConfirm</span>
             </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="submit">Đăng ký</button>
