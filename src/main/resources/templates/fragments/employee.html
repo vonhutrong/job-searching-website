@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 </head>
 <body>
@@ -43,17 +43,10 @@
                     <li><a th:href="@{/tin-tuyen-dung}">Trang chủ</a></li>
                     <li><a th:href="@{/nguoi-dung/quan-ly-ho-so}">Quản lý hồ sơ</a></li>
                 </ul>
-                <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
-                    <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">
                     <li><a href="#" onclick="document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span> Đăng xuất</a></li>
-                    <form id="logout-form" th:action="@{/dang-xuat}" method="POST"></form>
-                    </ul>
-                </div>
-                <div sec:authorize="isAnonymous()">
-                    <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" th:href="@{/dang-nhap}"><span class="glyphicon glyphicon-log-in"/> Đăng nhập</a></li>
-                    </ul>
-                </div>
+                    <form id="logout-form" th:action="@{/logout}" method="POST"></form>
+                </ul>
             </div>
         </nav>
     </th:block>
