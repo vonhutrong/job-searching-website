@@ -79,8 +79,8 @@ public class MainController {
         return "redirect:/login";
     }
 
-    @PostMapping("/dang-ky/doanh-nghiep")
-    private String signUp(@ModelAttribute("employerAccountForm") @Valid EmployerAccountForm employerAccountForm, BindingResult bindingResult, Model model) {
+    @PostMapping("/register/employer")
+    public String signUp(@ModelAttribute("employerAccountForm") @Valid EmployerAccountForm employerAccountForm, BindingResult bindingResult, Model model) {
         new EmployerAccountFormValidator().validate(employerAccountForm, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("employerAccountForm", employerAccountForm);

@@ -1,5 +1,6 @@
 package com.trong.form;
 
+import com.trong.validation.annotation.FieldMatch;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
@@ -12,14 +13,13 @@ import javax.validation.constraints.Pattern;
 
 @Data
 @ToString
+@FieldMatch(first = "password", second = "passwordConfirm")
 public class EmployerAccountForm {
     @Email
     @NotEmpty
     private String email;
-    @NotEmpty
     @Length(min = 6)
     private String password;
-    @NotEmpty
     @Length(min = 6)
     private String passwordConfirm;
 

@@ -15,13 +15,8 @@ public class EmployerAccountFormValidator implements Validator {
     public void validate(Object o, Errors errors) {
         EmployerAccountForm employerAccountForm = (EmployerAccountForm) o;
 
-        if (!employerAccountForm.getPassword().equals(employerAccountForm.getPasswordConfirm())) {
-            errors.rejectValue("password", "notMatch.password");
-            errors.rejectValue("passwordConfirm", "notMatch.passwordConfirm");
-        }
-
         if (employerAccountForm.getLogo().getOriginalFilename().equals("")) {
-            errors.rejectValue("logo", "notNull.logo");
+            errors.rejectValue("logo", "NotNull.employerAccountForm.logo");
         }
     }
 }
