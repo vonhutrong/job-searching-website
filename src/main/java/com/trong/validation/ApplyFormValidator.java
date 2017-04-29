@@ -22,11 +22,11 @@ public class ApplyFormValidator implements Validator {
         ApplyForm applyForm = (ApplyForm) o;
 
         if (recruitmentService.findById(applyForm.getRecruitmentId()) == null) {
-            errors.rejectValue("recruitmentId", "invalid.recruitmentId");
+            errors.rejectValue("recruitmentId", "Invalid.applyForm.recruitmentId");
         }
 
         if (applyForm.getCv().getOriginalFilename().equals("")) {
-            errors.rejectValue("cv", "null.cv");
+            errors.rejectValue("cv", "NotNull.applyForm.cv");
         }
     }
 }

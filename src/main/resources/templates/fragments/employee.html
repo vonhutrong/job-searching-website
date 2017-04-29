@@ -40,8 +40,8 @@
                     <a class="navbar-brand" href="#">Tìm việc trực tuyến</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li><a th:href="@{/tin-tuyen-dung}">Trang chủ</a></li>
-                    <li><a th:href="@{/nguoi-dung/quan-ly-ho-so}">Quản lý hồ sơ</a></li>
+                    <li><a th:href="@{/recruitment}">Trang chủ</a></li>
+                    <li><a th:href="@{/employee/applyManagement}">Quản lý hồ sơ</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#" onclick="document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span> Đăng xuất</a></li>
@@ -52,34 +52,23 @@
     </th:block>
 
     <th:block th:fragment="apply-recruitment">
-        <form action="#" th:action="@{/nguoi-dung/nop-don}" method="post" th:object="${applyForm}" enctype="multipart/form-data">
+        <form action="#" th:action="@{/employee/apply}" method="post" th:object="${applyForm}" enctype="multipart/form-data">
             <h2>Nộp đơn trực tuyến</h2>
             <div class="form-group">
-                <label>Bạn ứng tuyển hồ sơ vào <span th:text="${recruitment.title}">...</span></label>
-            </div>
-            <div class="form-group">
                 <label>Chức danh</label>
-                <input class="form-control" placeholder="Nhân viên ..."/>
+                <input class="form-control" th:value="${recruitment.title}" disabled="disabled"/>
             </div>
             <div class="form-group">
                 <label>Tên công ty</label>
-                <input class="form-control" th:value="${recruitment.employer.name}" placeholder="Công ty ..."/>
-            </div>
-            <div class="form-group">
-                <label>Tên của bạn</label>
-                <input class="form-control" th:value="${employee.name}"/>
+                <input class="form-control" th:value="${recruitment.employer.name}" disabled="disabled"/>
             </div>
             <div class="form-group">
                 Chọn hồ sơ
                 <input class="form-control" type="file" th:field="*{cv}"/>
-                <div th:if="${#fields.hasErrors('cv')}" class="text-danger">
-                    Chọn hồ sơ của bạn
-                </div>
+                <span th:if="${#fields.hasErrors('cv')}" th:errors="*{cv}"/>
             </div>
             <input type="hidden" th:value="${recruitment.id}" th:attr="name='recruitmentId'"/>
-            <div th:if="${#fields.hasErrors('recruitmentId')}" class="text-danger">
-                Tin tuyển dụng không hợp lệ
-            </div>
+            <span th:if="${#fields.hasErrors('recruitmentId')}" th:errors="*{recruitmentId}"/>
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary">Chấp nhận</button>
             </div>
@@ -87,8 +76,8 @@
     </th:block>
 
     <th:block th:fragment="apply-management">
-        <div class="well" th:each="applyHistory : ${applyHistories}">
-            <a th:href="@{/tin-tuyen-dung/chi-tiet(id=${applyHistory.recruitment.id})}">
+        <div class="well" th:each="applyHistory : ${page.content}">
+            <a th:href="@{/recruitment/details(id=${applyHistory.recruitment.id})}">
                 <label th:text="${applyHistory.recruitment.employer.name}"></label>
             </a><br/>
             <i><span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"></span></i><br/>

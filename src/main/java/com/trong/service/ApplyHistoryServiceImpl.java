@@ -4,14 +4,18 @@ import com.trong.model.ApplyHistory;
 import com.trong.model.Employee;
 import com.trong.repository.ApplyHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ApplyHistoryServiceImpl implements ApplyHistoryService {
+    private final ApplyHistoryRepository applyHistoryRepository;
+
     @Autowired
-    private ApplyHistoryRepository applyHistoryRepository;
+    public ApplyHistoryServiceImpl(ApplyHistoryRepository applyHistoryRepository) {
+        this.applyHistoryRepository = applyHistoryRepository;
+    }
 
     @Override
     public void save(ApplyHistory applyHistory) {
@@ -24,7 +28,7 @@ public class ApplyHistoryServiceImpl implements ApplyHistoryService {
     }
 
     @Override
-    public List<ApplyHistory> findByEmployee(Employee employee) {
-        return applyHistoryRepository.findByEmployeeOrderByDatetimeDesc(employee);
+    public Page<ApplyHistory> findByEmployee(Employee employee, Pageable pageable) {
+        return applyHistoryRepository.findByEmployeeOrderByDatetimeDesc(employee, pageable);
     }
 }

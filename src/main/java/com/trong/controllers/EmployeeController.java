@@ -4,16 +4,23 @@ import com.trong.form.ApplyForm;
 import com.trong.model.ApplyHistory;
 import com.trong.model.Employee;
 import com.trong.model.Recruitment;
-import com.trong.model.User;
-import com.trong.service.*;
+import com.trong.service.ApplyHistoryService;
+import com.trong.service.EmployeeService;
+import com.trong.service.RecruitmentService;
+import com.trong.util.PageWrapper;
 import com.trong.validation.ApplyFormValidator;
-import com.trong.validation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -21,44 +28,22 @@ import java.security.Principal;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/nguoi-dung")
+@RequestMapping("/employee")
 public class EmployeeController {
-    @Autowired
-    private UserService userService;
+    private final RecruitmentService recruitmentService;
+    private final EmployeeService employeeService;
+    private final ApplyHistoryService applyHistoryService;
+    private final ApplyFormValidator applyFormValidator;
 
     @Autowired
-    private SecurityService securityService;
-
-    @Autowired
-    private UserValidator userValidator;
-
-    @Autowired
-    private RecruitmentService recruitmentService;
-
-    @Autowired
-    private EmployeeService employeeService;
-
-    @Autowired
-    private ApplyHistoryService applyHistoryService;
-
-    @Autowired
-    private ApplyFormValidator applyFormValidator;
-
-    @RequestMapping(value = "/dang-ky", method = RequestMethod.POST)
-    public String signUP(@ModelAttribute("userForm")User userForm, BindingResult bindingResult, Model model) {
-        userValidator.validate(userForm, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "/";
-        }
-
-        userService.save(userForm);
-
-        securityService.autoLogin(userForm.getEmail(), userForm.getPasswordConfirm());
-        return "redirect:/";
+    public EmployeeController(RecruitmentService recruitmentService, EmployeeService employeeService, ApplyHistoryService applyHistoryService, ApplyFormValidator applyFormValidator) {
+        this.recruitmentService = recruitmentService;
+        this.employeeService = employeeService;
+        this.applyHistoryService = applyHistoryService;
+        this.applyFormValidator = applyFormValidator;
     }
 
-    @GetMapping("/nop-don")
+    @GetMapping("/apply")
     public String applyForm(@Param("recruitmentId") Long recruitmentId, Model model, Principal principal) {
         model.addAttribute("recruitment", recruitmentService.findById(recruitmentId));
         model.addAttribute("employee", employeeService.findByEmail(principal.getName()));
@@ -66,7 +51,7 @@ public class EmployeeController {
         return "employee/applying";
     }
 
-    @PostMapping("/nop-don")
+    @PostMapping("/apply")
     public String applyRecruitment(@ModelAttribute("applyForm") @Valid ApplyForm applyForm, BindingResult bindingResult, Principal principal, Model model) {
         applyFormValidator.validate(applyForm, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -88,21 +73,18 @@ public class EmployeeController {
         applyHistory.setRecruitment(recruitment);
 
         applyHistoryService.save(applyHistory);
-        return "redirect:/tin-tuyen-dung";
+        return "redirect:/recruitment";
     }
 
-    @GetMapping("/quan-ly-ho-so")
-    public String manageApply(Principal principal, Model model) {
-        model.addAttribute("applyHistories", applyHistoryService.findByEmployee(employeeService.findByEmail(principal.getName())));
+    @GetMapping("/applyManagement")
+    public String manageApply(@PageableDefault(size = 5) Pageable pageable, Principal principal, Model model) {
+        Employee employee = employeeService.findByEmail(principal.getName());
+        Page<ApplyHistory> applyHistories = applyHistoryService.findByEmployee(employee, pageable);
+        model.addAttribute("page", new PageWrapper<ApplyHistory>(applyHistories, "/employee/applyManagement"));
         return "employee/apply_management";
     }
 
     private String saveCv(MultipartFile cv, String email) {
         return MainController.saveFile(cv, email);
-    }
-
-    @RequestMapping("/trang-chu")
-    public String home() {
-        return "employee/home";
     }
 }
