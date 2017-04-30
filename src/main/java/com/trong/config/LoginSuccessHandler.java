@@ -23,16 +23,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         clearAuthenticationAttributes(request);
     }
 
-    protected void handle(HttpServletRequest request,
-                          HttpServletResponse response, Authentication authentication)
+    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
-
         String targetUrl = determineTargetUrl(authentication);
-
         if (response.isCommitted()) {
             return;
         }
-
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
@@ -54,7 +50,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         if (isEmployee) {
             return "/recruitment";
         } else if (isEmployer) {
-            return "/nha-tuyen-dung/dang-tin";
+            return "/employer/postRecruitment";
         } else {
             throw new IllegalStateException();
         }

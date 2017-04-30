@@ -54,11 +54,11 @@
     <th:block th:fragment="review-apply">
         <div class="well" th:each="applyHistory : ${recruitment.applyHistories}" style="padding-bottom: 1em">
             <span th:text="${applyHistory.employee.name}"></span> - Lúc: <span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"></span>
-            <a th:href="@{/tin-tuyen-dung/tai-xuong(applyHistoryId=${applyHistory.id})}">Đơn xin việc</a>
+            <a th:href="@{/recruitment/cv(applyHistoryId=${applyHistory.id})}">Đơn xin việc</a>
             <div th:if="${applyHistory.approved == null}">
                 <span>Đánh giá hồ sơ</span>
-                <a th:href="@{/nha-tuyen-dung/cap-nhat-ho-so(applyHistoryId=${applyHistory.id}, approved=true)}">Đạt</a>
-                <a th:href="@{/nha-tuyen-dung/cap-nhat-ho-so(applyHistoryId=${applyHistory.id}, approved=false)}">Không đạt</a>
+                <a th:href="@{/employer/updateApplication(applyHistoryId=${applyHistory.id}, approved=true)}">Đạt</a>
+                <a th:href="@{/employer/updateApplication(applyHistoryId=${applyHistory.id}, approved=false)}">Không đạt</a>
             </div>
             <div th:if="${applyHistory.approved != null}">
                 <span>Tình trạng đánh giá: </span>

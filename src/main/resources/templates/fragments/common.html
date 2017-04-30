@@ -36,6 +36,7 @@
             <th:block th:include="fragments/employee::header"/>
         </div>
         <div sec:authorize="hasRole('ROLE_EMPLOYER')">
+            <th:block th:include="fragments/employer::header"/>
         </div>
     </th:block>
 

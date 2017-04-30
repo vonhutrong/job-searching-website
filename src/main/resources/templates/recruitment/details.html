@@ -8,21 +8,17 @@
 
     <div class="container">
         <th:block th:include="fragments/common::header"/>
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2">
-                <div class="well">
-                    <th:block th:include="fragments/recruitment::details"/>
-                </div>
+        <div class="col-lg-8 col-lg-offset-2">
+            <div class="well">
+                <th:block th:include="fragments/recruitment::details"/>
             </div>
         </div>
 
         <br/>
         <div sec:authorize="hasRole('ROLE_EMPLOYER')">
-            <div class="row text-left">
-                <div class="col-lg-6 col-lg-offset-3">
-                    <label>Danh sách người nộp đơn:</label>
-                    <th:block th:include="fragments/recruitment::review-apply"/>
-                </div>
+            <div class="col-lg-8 col-lg-offset-2">
+                <label>Danh sách người nộp đơn:</label>
+                <th:block th:include="fragments/recruitment::review-apply"/>
             </div>
         </div>
         <th:block th:include="fragments/common::footer"/>

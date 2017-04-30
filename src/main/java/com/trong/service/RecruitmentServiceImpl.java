@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class RecruitmentServiceImpl implements RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
@@ -25,23 +23,8 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     }
 
     @Override
-    public List<Recruitment> recent() {
-        return recruitmentRepository.findAllByOrderByCreatedDatetimeAsc();
-    }
-
-    @Override
     public Recruitment findById(Long id) {
         return recruitmentRepository.findById(id);
-    }
-
-    @Override
-    public List<Recruitment> searchBasic(String keyword, Long departmentId) {
-        return recruitmentRepository.findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(keyword, departmentId);
-    }
-
-    @Override
-    public List<Recruitment> findByEmployer(Employer employer) {
-        return recruitmentRepository.findByEmployerOrderByCreatedDatetimeAsc(employer);
     }
 
     @Override
@@ -52,5 +35,10 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     @Override
     public Page<Recruitment> searchBasic(String keyword, Long departmentId, Pageable pageable) {
         return recruitmentRepository.findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(keyword, departmentId, pageable);
+    }
+
+    @Override
+    public Page<Recruitment> findByEmployer(Employer employer, Pageable pageable) {
+        return recruitmentRepository.findByEmployerOrderByCreatedDatetimeAsc(employer, pageable);
     }
 }

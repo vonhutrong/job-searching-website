@@ -28,15 +28,12 @@ import java.io.InputStream;
 @Controller
 @RequestMapping("/recruitment")
 public class RecruitmentController {
-
     private final RecruitmentService recruitmentService;
     private final DepartmentService departmentService;
     private final ApplyHistoryService applyHistoryService;
 
     @Autowired
-    public RecruitmentController(RecruitmentService recruitmentService,
-                                 DepartmentService departmentService,
-                                 ApplyHistoryService applyHistoryService) {
+    public RecruitmentController(RecruitmentService recruitmentService, DepartmentService departmentService, ApplyHistoryService applyHistoryService) {
         this.recruitmentService = recruitmentService;
         this.departmentService = departmentService;
         this.applyHistoryService = applyHistoryService;
@@ -57,9 +54,7 @@ public class RecruitmentController {
     }
 
     @GetMapping("/search")
-    public String search(@PageableDefault(size = 5) Pageable pageable,
-                         @ModelAttribute("searchForm") SearchForm searchForm,
-                         Model model) {
+    public String search(@PageableDefault(size = 5) Pageable pageable, @ModelAttribute("searchForm") SearchForm searchForm, Model model) {
         model.addAttribute("keyword", searchForm.getKeyword());
         Page<Recruitment> recruitments = recruitmentService.searchBasic(searchForm.getKeyword(), searchForm.getDepartmentId(), pageable);
         String url = String.format("/recruitment/search?keyword=%s&departmentId=%s", searchForm.getKeyword(), searchForm.getDepartmentId());
@@ -68,8 +63,7 @@ public class RecruitmentController {
     }
 
     @GetMapping("/cv")
-    public void downloadCv(@Param("applyHistoryId") Long applyHistoryId,
-                            HttpServletResponse response) {
+    public void downloadCv(@Param("applyHistoryId") Long applyHistoryId, HttpServletResponse response) {
         try {
             ApplyHistory applyHistory = applyHistoryService.findById(applyHistoryId);
             InputStream is = new FileInputStream(new File(applyHistory.getCvPath()));

@@ -3,9 +3,13 @@ package com.trong.controllers;
 import com.trong.form.RecruitmentForm;
 import com.trong.model.*;
 import com.trong.service.*;
+import com.trong.util.PageWrapper;
 import com.trong.validation.RecruitmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -19,24 +23,24 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/nha-tuyen-dung")
+@RequestMapping("/employer")
 public class EmployerController {
-    @Autowired
-    private RecruitmentService recruitmentService;
+    private final RecruitmentService recruitmentService;
+    private final DepartmentService departmentService;
+    private final EducationalLevelService educationalLevelService;
+    private final EmployerService employerService;
+    private final ApplyHistoryService applyHistoryService;
 
     @Autowired
-    private DepartmentService departmentService;
+    public EmployerController(RecruitmentService recruitmentService, DepartmentService departmentService, EducationalLevelService educationalLevelService, EmployerService employerService, ApplyHistoryService applyHistoryService) {
+        this.recruitmentService = recruitmentService;
+        this.departmentService = departmentService;
+        this.educationalLevelService = educationalLevelService;
+        this.employerService = employerService;
+        this.applyHistoryService = applyHistoryService;
+    }
 
-    @Autowired
-    private EducationalLevelService educationalLevelService;
-
-    @Autowired
-    private EmployerService employerService;
-
-    @Autowired
-    private ApplyHistoryService applyHistoryService;
-
-    @GetMapping("/dang-tin")
+    @GetMapping("/postRecruitment")
     public String publicRecruitmentPage(Model model) {
         model.addAttribute("recruitmentForm", new RecruitmentForm());
         model.addAttribute("departments", departmentService.findAll());
@@ -59,18 +63,20 @@ public class EmployerController {
         return "redirect:/nha-tuyen-dung/dang-tin";
     }
 
-    @GetMapping("/quan-ly-tin")
-    public String manageRecruitment(Model model, Principal principal) {
-        model.addAttribute("recruitments", recruitmentService.findByEmployer(employerService.findByEmail(principal.getName())));
+    @GetMapping("/recruitmentManagement")
+    public String manageRecruitment(@PageableDefault(size = 1) Pageable pageable, Model model, Principal principal) {
+        Employer employer = employerService.findByEmail(principal.getName());
+        Page<Recruitment> recruitments = recruitmentService.findByEmployer(employer, pageable);
+        model.addAttribute("page", new PageWrapper<Recruitment>(recruitments, "/employer/recruitmentManagement"));
         return "employer/recruitment_manage";
     }
 
-    @GetMapping("/cap-nhat-ho-so")
+    @GetMapping("/updateApplication")
     public String updateApplyHistory(@Param("applyHistoryId") Long applyHistoryId, @Param("approved") Boolean approved) {
         ApplyHistory applyHistory = applyHistoryService.findById(applyHistoryId);
         applyHistory.setApproved(approved);
         applyHistoryService.save(applyHistory);
-        return "redirect:/nha-tuyen-dung/dang-tin";
+        return String.format("redirect:/recruitment/details?id=%s", applyHistory.getRecruitment().getId());
     }
 
     private void saveRecruitment(RecruitmentForm recruitmentForm, Principal principal) {
