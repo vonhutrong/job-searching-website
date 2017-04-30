@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 @Controller
 @RequestMapping("/recruitment")
 public class RecruitmentController {
+    private static final int BUFFER_SIZE = 4096;
     private final RecruitmentService recruitmentService;
     private final DepartmentService departmentService;
     private final ApplyHistoryService applyHistoryService;
@@ -63,14 +63,40 @@ public class RecruitmentController {
     }
 
     @GetMapping("/cv")
-    public void downloadCv(@Param("applyHistoryId") Long applyHistoryId, HttpServletResponse response) {
-        try {
-            ApplyHistory applyHistory = applyHistoryService.findById(applyHistoryId);
-            InputStream is = new FileInputStream(new File(applyHistory.getCvPath()));
-            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
-        } catch (IOException ex) {
-            throw new RuntimeException("IOError writing file to output stream");
+    public void downloadApplication(@Param("applyHistoryId") Long applyHistoryId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ApplyHistory applyHistory = applyHistoryService.findById(applyHistoryId);
+        String cvPath = applyHistory.getCvPath();
+        File downloadFile = new File(cvPath);
+        InputStream inputStream = new FileInputStream(downloadFile);
+
+        ServletContext context = request.getServletContext();
+        String mimeType = context.getMimeType(cvPath);
+        if (mimeType == null) {
+            // set to binary type if MIME mapping not found
+            mimeType = "application/octet-stream";
         }
+
+        // set content attributes for the response
+        response.setContentType(mimeType);
+        response.setContentLength((int) downloadFile.length());
+
+        // set headers for the response
+        String headerKey = "Content-Disposition";
+        String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+        response.setHeader(headerKey, headerValue);
+
+        // get output stream of the response
+        OutputStream outStream = response.getOutputStream();
+
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int bytesRead = -1;
+
+        // write bytes read from the input stream into the output stream
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outStream.write(buffer, 0, bytesRead);
+        }
+
+        inputStream.close();
+        outStream.close();
     }
 }
