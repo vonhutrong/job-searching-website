@@ -33,10 +33,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     protected String determineTargetUrl(Authentication authentication) {
-        boolean isEmployee = false;
-        boolean isEmployer = false;
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
+
+        boolean isEmployee = false;
+        boolean isEmployer = false;
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_EMPLOYEE")) {
                 isEmployee = true;
@@ -50,7 +51,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         if (isEmployee) {
             return "/recruitment";
         } else if (isEmployer) {
-            return "/employer/postRecruitment";
+            return "/employer/recruitmentManagement";
         } else {
             throw new IllegalStateException();
         }

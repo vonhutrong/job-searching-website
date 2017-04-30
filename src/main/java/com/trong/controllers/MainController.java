@@ -13,6 +13,11 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 
 @Controller
@@ -44,7 +50,23 @@ public class MainController {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:/recruitment";
+        return redirectToDefaultPageOfUserType("redirect:/recruitment");
+    }
+
+    private String redirectToDefaultPageOfUserType(String defaultPage) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+            for (GrantedAuthority grantedAuthority : authorities) {
+                if (grantedAuthority.getAuthority().equals("ROLE_EMPLOYEE")) {
+                    return "redirect:/recruitment";
+                } else if (grantedAuthority.getAuthority().equals("ROLE_EMPLOYER")) {
+                    return "redirect:/employer/recruitmentManagement";
+                }
+            }
+        }
+        return defaultPage;
     }
 
     @GetMapping("/register/{accountType}")
@@ -154,6 +176,6 @@ public class MainController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return redirectToDefaultPageOfUserType("/login");
     }
 }
