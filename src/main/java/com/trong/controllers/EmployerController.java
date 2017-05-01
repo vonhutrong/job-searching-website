@@ -4,7 +4,6 @@ import com.trong.form.RecruitmentForm;
 import com.trong.model.*;
 import com.trong.service.*;
 import com.trong.util.PageWrapper;
-import com.trong.validation.RecruitmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,10 +47,8 @@ public class EmployerController {
         return "employer/public_recruitment";
     }
 
-    @PostMapping("/dang-tin")
+    @PostMapping("/postRecruitment")
     public String publicRecruitment(@ModelAttribute("recruitmentForm") @Valid RecruitmentForm recruitmentForm, BindingResult bindingResult, Principal principal, ModelMap model) {
-        RecruitmentValidator recruitmentValidator = new RecruitmentValidator();
-        recruitmentValidator.validate(recruitmentForm, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("recruitmentForm", recruitmentForm);
             model.addAttribute("departments", departmentService.findAll());
