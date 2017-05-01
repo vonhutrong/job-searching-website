@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 </head>
 <body>
@@ -94,8 +94,10 @@
         <b>Hạn nộp hồ sơ: </b><i th:text="${#dates.format(recruitment.deadlineForSubmission, 'dd-MM-yyyy')}"/><br/>
         <br/>
 
-        <div class="text-center">
-            <a class="btn btn-primary" th:href="@{/employee/apply(recruitmentId=${recruitment.id})}">Nộp đơn</a>
+        <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
+            <div class="text-center">
+                <a class="btn btn-primary" th:href="@{/employee/apply(recruitmentId=${recruitment.id})}">Nộp đơn</a>
+            </div>
         </div>
     </th:block>
 
