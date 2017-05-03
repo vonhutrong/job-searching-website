@@ -6,6 +6,7 @@ import com.trong.model.Employee;
 import com.trong.model.Recruitment;
 import com.trong.service.ApplyHistoryService;
 import com.trong.service.EmployeeService;
+import com.trong.service.NotificationService;
 import com.trong.service.RecruitmentService;
 import com.trong.util.PageWrapper;
 import com.trong.validation.ApplyFormValidator;
@@ -34,13 +35,15 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final ApplyHistoryService applyHistoryService;
     private final ApplyFormValidator applyFormValidator;
+    private final NotificationService notificationService;
 
     @Autowired
-    public EmployeeController(RecruitmentService recruitmentService, EmployeeService employeeService, ApplyHistoryService applyHistoryService, ApplyFormValidator applyFormValidator) {
+    public EmployeeController(RecruitmentService recruitmentService, EmployeeService employeeService, ApplyHistoryService applyHistoryService, ApplyFormValidator applyFormValidator, NotificationService notificationService) {
         this.recruitmentService = recruitmentService;
         this.employeeService = employeeService;
         this.applyHistoryService = applyHistoryService;
         this.applyFormValidator = applyFormValidator;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/apply")
@@ -58,6 +61,7 @@ public class EmployeeController {
             model.addAttribute("recruitment", recruitmentService.findById(applyForm.getRecruitmentId()));
             model.addAttribute("employee", employeeService.findByEmail(principal.getName()));
             model.addAttribute("applyForm", applyForm);
+            notificationService.addErrorMessage("ApplyFail.employee");
             return "employee/applying";
         }
 
@@ -73,6 +77,7 @@ public class EmployeeController {
         applyHistory.setRecruitment(recruitment);
 
         applyHistoryService.save(applyHistory);
+        notificationService.addInfoMessage("ApplySuccess.employee");
         return "redirect:/recruitment";
     }
 

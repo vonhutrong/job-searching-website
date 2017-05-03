@@ -7,6 +7,7 @@ import com.trong.model.Employer;
 import com.trong.model.User;
 import com.trong.service.EmployeeService;
 import com.trong.service.EmployerService;
+import com.trong.service.NotificationService;
 import com.trong.service.RoleService;
 import com.trong.validation.EmployerAccountFormValidator;
 import org.apache.commons.io.IOUtils;
@@ -39,13 +40,15 @@ public class MainController {
     private final EmployeeService employeeService;
     private final EmployerService employerService;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationService notificationService;
 
     @Autowired
-    public MainController(RoleService roleService, EmployeeService employeeService, EmployerService employerService, PasswordEncoder passwordEncoder) {
+    public MainController(RoleService roleService, EmployeeService employeeService, EmployerService employerService, PasswordEncoder passwordEncoder, NotificationService notificationService) {
         this.roleService = roleService;
         this.employeeService = employeeService;
         this.employerService = employerService;
         this.passwordEncoder = passwordEncoder;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/")
@@ -85,6 +88,7 @@ public class MainController {
     public String register(@ModelAttribute("employeeAccountForm") @Valid EmployeeAccountForm employeeAccountForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("employeeAccountForm", employeeAccountForm);
+            notificationService.addErrorMessage("RegisterFail.employee");
             return "employee/register";
         }
 
@@ -98,6 +102,7 @@ public class MainController {
         employee.setName(employeeAccountForm.getName());
         employeeService.save(employee);
 
+        notificationService.addInfoMessage("RegisterSuccess.employee");
         return "redirect:/login";
     }
 
@@ -106,6 +111,7 @@ public class MainController {
         new EmployerAccountFormValidator().validate(employerAccountForm, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("employerAccountForm", employerAccountForm);
+            notificationService.addErrorMessage("RegisterFail.employer");
             return "employer/register";
         }
 
@@ -125,6 +131,7 @@ public class MainController {
 
         employerService.save(employer);
 
+        notificationService.addInfoMessage("RegisterSuccess.employer");
         return "redirect:/login";
     }
 

@@ -29,14 +29,16 @@ public class EmployerController {
     private final EducationalLevelService educationalLevelService;
     private final EmployerService employerService;
     private final ApplyHistoryService applyHistoryService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public EmployerController(RecruitmentService recruitmentService, DepartmentService departmentService, EducationalLevelService educationalLevelService, EmployerService employerService, ApplyHistoryService applyHistoryService) {
+    public EmployerController(RecruitmentService recruitmentService, DepartmentService departmentService, EducationalLevelService educationalLevelService, EmployerService employerService, ApplyHistoryService applyHistoryService, NotificationService notificationService) {
         this.recruitmentService = recruitmentService;
         this.departmentService = departmentService;
         this.educationalLevelService = educationalLevelService;
         this.employerService = employerService;
         this.applyHistoryService = applyHistoryService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/postRecruitment")
@@ -53,10 +55,12 @@ public class EmployerController {
             model.addAttribute("recruitmentForm", recruitmentForm);
             model.addAttribute("departments", departmentService.findAll());
             model.addAttribute("educationalLevels", educationalLevelService.findAll());
+            notificationService.addErrorMessage("PostFail.employer");
             return "employer/public_recruitment";
         }
 
         saveRecruitment(recruitmentForm, principal);
+        notificationService.addInfoMessage("PostSuccess.employer");
         return "redirect:/nha-tuyen-dung/dang-tin";
     }
 
