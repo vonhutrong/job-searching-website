@@ -61,7 +61,7 @@ public class EmployerController {
 
         saveRecruitment(recruitmentForm, principal);
         notificationService.addInfoMessage("PostSuccess.employer");
-        return "redirect:/nha-tuyen-dung/dang-tin";
+        return "redirect:/";
     }
 
     @GetMapping("/recruitmentManagement")
