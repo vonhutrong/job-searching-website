@@ -9,7 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface RecruitmentRepository extends PagingAndSortingRepository<Recruitment, Long> {
     Recruitment findById(Long id);
 
-    Page<Recruitment> findAllByOrderByCreatedDatetimeAsc(Pageable pageable);
+    Page<Recruitment> findAllByOrderByCreatedDatetimeDesc(Pageable pageable);
     Page<Recruitment> findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(String keyword, Long departmentId, Pageable pageable);
 
     Page<Recruitment> findByEmployerOrderByCreatedDatetimeAsc(Employer employer, Pageable pageable);

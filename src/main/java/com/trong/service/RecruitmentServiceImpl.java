@@ -29,7 +29,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Override
     public Page<Recruitment> recent(Pageable pageable) {
-        return recruitmentRepository.findAllByOrderByCreatedDatetimeAsc(pageable);
+        return recruitmentRepository.findAllByOrderByCreatedDatetimeDesc(pageable);
     }
 
     @Override
