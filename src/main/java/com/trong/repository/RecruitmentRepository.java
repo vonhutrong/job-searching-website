@@ -11,6 +11,8 @@ public interface RecruitmentRepository extends PagingAndSortingRepository<Recrui
 
     Page<Recruitment> findAllByOrderByCreatedDatetimeDesc(Pageable pageable);
     Page<Recruitment> findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(String keyword, Long departmentId, Pageable pageable);
+    Page<Recruitment> findByDepartmentIdOrderByCreatedDatetimeAsc(Long departmentId, Pageable pageable);
+    Page<Recruitment> findByTitleContainingIgnoreCaseOrderByCreatedDatetimeAsc(String keyword, Pageable pageable);
 
     Page<Recruitment> findByEmployerOrderByCreatedDatetimeAsc(Employer employer, Pageable pageable);
 }
