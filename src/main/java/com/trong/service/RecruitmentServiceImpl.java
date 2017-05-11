@@ -34,6 +34,12 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Override
     public Page<Recruitment> searchBasic(String keyword, Long departmentId, Pageable pageable) {
+        if (keyword.isEmpty() && 0 == departmentId)
+            return recruitmentRepository.findAllByOrderByCreatedDatetimeDesc(pageable);
+        if (keyword.isEmpty() && 0 != departmentId)
+            return recruitmentRepository.findByDepartmentIdOrderByCreatedDatetimeAsc(departmentId, pageable);
+        if (!keyword.isEmpty() && 0 == departmentId)
+            return recruitmentRepository.findByTitleContainingIgnoreCaseOrderByCreatedDatetimeAsc(keyword, pageable);
         return recruitmentRepository.findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(keyword, departmentId, pageable);
     }
 
