@@ -2,14 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <th:block th:fragment="head">
-        <link rel="stylesheet" href="../../public/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+        <link rel="stylesheet" href="../../public/css/bootstrap.min.old.css" th:href="@{/css/bootstrap.min.css}"/>
         <script src="../../public/js/jquery-3.2.0.min.js" th:src="@{/js/jquery-3.2.0.min.js}"/>
         <script src="../../public/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"/>
+        <style th:inline="text">
+            body {
+                background: #F6F6F6;
+            }
+
+            div.my-footer {
+                padding-top: 3em;
+            }
+        </style>
     </th:block>
 </head>
 <body>
 
     <th:block th:fragment="header">
+        <div>
+            <img src="../../public/img/bottom-banner.jpg" width="100%" th:src="@{/img/banner.jpg}"/>
+        </div>
+
         <div sec:authorize="isAnonymous()">
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
@@ -50,7 +63,7 @@
     <th:block th:fragment="login-form">
         <form class="form-horizontal text-center" th:action="@{/login}" method="post">
             <div class="form-group row">
-                <div class="col-sm-offset-4 col-sm-5"><h3>Hãy đăng nhập</h3></div>
+                <div class="col-sm-offset-4 col-sm-5"><h4>Hãy đăng nhập</h4></div>
             </div>
             <div class="form-group row" th:if="${param.error != null}">
                 <div class="alert alert-danger">
@@ -101,6 +114,17 @@
                     <a th:if="${not page.lastPage}" th:href="@{${page.url}(page=${page.totalPages - 1},size=${page.size})}">Trang cuối →</a>
                 </li>
             </ul>
+        </div>
+    </th:block>
+
+    <th:block th:fragment="footer">
+        <div class="my-footer">
+            <div>
+                <img src="../../public/img/banner.jpg" width="100%" th:src="@{/img/bottom-banner.jpg}"/>
+            </div>
+            <div class="text-center">
+                <i>@Copyright 2017 - developed by: Vo Nhu Trong - email: vonhutrong@gmail.com</i>
+            </div>
         </div>
     </th:block>
 
