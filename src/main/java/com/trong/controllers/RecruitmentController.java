@@ -62,6 +62,11 @@ public class RecruitmentController {
         return "recruitment/searching_result";
     }
 
+    @GetMapping("/advancedSearch")
+    public String advancedSearch() {
+        return "recruitment/advanced_search";
+    }
+
     @GetMapping("/cv")
     public void downloadApplication(@Param("applyHistoryId") Long applyHistoryId, HttpServletRequest request, HttpServletResponse response) throws IOException {
         ApplyHistory applyHistory = applyHistoryService.findById(applyHistoryId);
