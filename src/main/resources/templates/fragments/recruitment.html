@@ -158,6 +158,9 @@
     </th:block>
 
     <th:block th:fragment="content">
+        <div class="text-center">
+            <h4>Đăng tin tuyển dụng</h4>
+        </div>
         <form action="#" th:action="@{/employer/postRecruitment}" th:object="${recruitmentForm}" method="post">
             <div class="form-group">
                 <label>Tiêu đề <span class="text-danger">*</span></label>

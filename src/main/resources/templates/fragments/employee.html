@@ -6,7 +6,7 @@
 
     <th:block th:fragment="sign-up">
         <form action="#" th:action="@{/register/employee}" th:object="${employeeAccountForm}" method="post">
-            <h2>Đăng ký tài khoản người tìm việc</h2>
+            <h4>Đăng ký tài khoản người tìm việc</h4>
             <div class="form-group">
                 <label>Họ và tên</label>
                 <input class="form-control" type="text" th:field="*{name}"/>
