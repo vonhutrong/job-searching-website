@@ -1,5 +1,6 @@
 package com.trong.controllers;
 
+import com.trong.form.AdvancedSearchForm;
 import com.trong.form.SearchForm;
 import com.trong.model.ApplyHistory;
 import com.trong.model.Recruitment;
@@ -14,14 +15,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.*;
 
 @Controller
@@ -63,7 +63,20 @@ public class RecruitmentController {
     }
 
     @GetMapping("/advancedSearch")
-    public String advancedSearch() {
+    public String advancedSearch(Model model) {
+        return advancedSearchPage(new AdvancedSearchForm(), model);
+    }
+
+    @PostMapping("/advancedSearch")
+    public String advancedSearchProcessing(@ModelAttribute("advancedSearchForm") @Valid AdvancedSearchForm advancedSearchForm, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return advancedSearchPage(advancedSearchForm, model);
+        }
+        return "redirect:/";
+    }
+
+    private String advancedSearchPage(AdvancedSearchForm advancedSearchForm, Model model) {
+        model.addAttribute("advancedSearchForm", advancedSearchForm);
         return "recruitment/advanced_search";
     }
 

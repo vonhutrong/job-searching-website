@@ -38,50 +38,50 @@
 
     <th:block th:fragment="advanced-search">
         <h3 class="text-center">Tìm kiếm nâng cao</h3>
-        <form class="form-horizontal">
+        <form class="form-horizontal" th:action="@{/recruitment/advancedSearch}" th:object="${advancedSearchForm}" method="post">
             <div class="form-group">
                 <label class="col-sm-3 text-right">Từ khóa</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="text"/>
+                    <input class="form-control" type="text" th:field="*{keyword}"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 text-right">Ngành nghề</label>
                 <div class="col-sm-6">
-                    <select class="form-control">
-                        <option>Ngành nghề</option>
+                    <select class="form-control" th:field="*{departmentId}">
+                        <option value="">Ngành nghề</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 text-right">Yêu cầu giới tính</label>
                 <div class="col-sm-6">
-                    <label><input type="radio" name="gender"/> Nam</label>
-                    <label><input type="radio" name="gender"/> Nữ</label>
+                    <label><input type="radio" name="gender" th:field="*{requiredFemale}" th:value="false"/> Nam</label>
+                    <label><input type="radio" name="gender" th:field="*{requiredFemale}" th:value="true"/> Nữ</label>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 text-right">Độ tuổi</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="number"/>
+                    <input class="form-control" type="number" th:field="*{averageAge}"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 text-right">Năm kinh nghiệm</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="number"/>
+                    <input class="form-control" type="number" th:field="*{yearsOfExperience}"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 text-right">Mức lương</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="number"/>
+                    <input class="form-control" type="number" th:field="*{salary}"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 text-right">Trình độ học vấn</label>
                 <div class="col-sm-6">
-                    <select class="form-control">
+                    <select class="form-control" th:field="*{educationalLevelId}">
                         <option value="">Trình độ học vấn</option>
                     </select>
                 </div>
