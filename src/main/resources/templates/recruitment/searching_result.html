@@ -8,14 +8,13 @@
     <div class="container">
         <th:block th:include="fragments/common::header"/>
         <div class="row">
-            <div class="col-lg-6 col-lg-offset-3">
+            <div class="col-md-8 col-md-offset-2">
                 <h3>Kết quả tìm kiếm việc làm</h3>
-                Với từ khóa "<span th:text="${keyword}"/>"
                 <th:block th:include="fragments/recruitment::review"/>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-lg-offset-3">
+            <div class="col-md-8 col-md-offset-2">
                 <th:block th:include="fragments/common::pagination"/>
             </div>
         </div>

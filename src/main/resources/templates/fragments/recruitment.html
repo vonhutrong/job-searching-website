@@ -38,7 +38,7 @@
 
     <th:block th:fragment="advanced-search">
         <h3 class="text-center">Tìm kiếm nâng cao</h3>
-        <form class="form-horizontal" th:action="@{/recruitment/advancedSearch}" th:object="${advancedSearchForm}" method="post">
+        <form class="form-horizontal" th:action="@{/recruitment/advancedSearchProcessing}" th:object="${advancedSearchForm}" method="get">
             <div class="form-group">
                 <label class="col-sm-3 text-right">Từ khóa</label>
                 <div class="col-sm-6">
@@ -49,7 +49,7 @@
                 <label class="col-sm-3 text-right">Ngành nghề</label>
                 <div class="col-sm-6">
                     <select class="form-control" th:field="*{departmentId}">
-                        <option value="">Ngành nghề</option>
+                        <option th:each="i : ${departments}" th:value="${i.id}" th:text="${i.name}">Ngành nghề</option>
                     </select>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                 <label class="col-sm-3 text-right">Trình độ học vấn</label>
                 <div class="col-sm-6">
                     <select class="form-control" th:field="*{educationalLevelId}">
-                        <option value="">Trình độ học vấn</option>
+                        <option th:each="i : ${educationalLevels}" th:value="${i.id}" th:text="${i.name}">Trình độ</option>
                     </select>
                 </div>
             </div>

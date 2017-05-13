@@ -1,5 +1,6 @@
 package com.trong.service;
 
+import com.trong.form.AdvancedSearchForm;
 import com.trong.model.Employer;
 import com.trong.model.Recruitment;
 import org.springframework.data.domain.Page;
@@ -13,4 +14,6 @@ public interface RecruitmentService {
     Page<Recruitment> searchBasic(String keyword, Long departmentId, Pageable pageable);
 
     Page<Recruitment> findByEmployer(Employer employer, Pageable pageable);
+
+    Page<Recruitment> search(AdvancedSearchForm advancedSearchForm, Pageable pageable);
 }
