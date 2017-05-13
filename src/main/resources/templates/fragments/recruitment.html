@@ -49,7 +49,10 @@
                 <label class="col-sm-3 text-right">Ngành nghề</label>
                 <div class="col-sm-6">
                     <select class="form-control" th:field="*{departmentId}">
-                        <option th:each="i : ${departments}" th:value="${i.id}" th:text="${i.name}">Ngành nghề</option>
+                        <div th:each="i : ${departments}">
+                            <option th:if="${i.id == null}" th:value="null">Tất cả</option>
+                            <option th:unless="${i.id == null}" th:value="${i.id}" th:text="${i.name}"/>
+                        </div>
                     </select>
                 </div>
             </div>
@@ -82,7 +85,10 @@
                 <label class="col-sm-3 text-right">Trình độ học vấn</label>
                 <div class="col-sm-6">
                     <select class="form-control" th:field="*{educationalLevelId}">
-                        <option th:each="i : ${educationalLevels}" th:value="${i.id}" th:text="${i.name}">Trình độ</option>
+                        <div th:each="i : ${educationalLevels}">
+                            <option th:if="${i.id == null}" th:value="null">Tất cả</option>
+                            <option th:unless="${i.id == null}" th:value="${i.id}" th:text="${i.name}"/>
+                        </div>
                     </select>
                 </div>
             </div>

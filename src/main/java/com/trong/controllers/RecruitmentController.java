@@ -3,6 +3,8 @@ package com.trong.controllers;
 import com.trong.form.AdvancedSearchForm;
 import com.trong.form.SearchForm;
 import com.trong.model.ApplyHistory;
+import com.trong.model.Department;
+import com.trong.model.EducationalLevel;
 import com.trong.model.Recruitment;
 import com.trong.service.ApplyHistoryService;
 import com.trong.service.DepartmentService;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
+import java.util.List;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -104,8 +107,12 @@ public class RecruitmentController {
 
     private String advancedSearchPage(AdvancedSearchForm advancedSearchForm, Model model) {
         model.addAttribute("advancedSearchForm", advancedSearchForm);
-        model.addAttribute("departments", departmentService.findAll());
-        model.addAttribute("educationalLevels", educationalLevelService.findAll());
+        List<Department> departments = departmentService.findAll();
+        departments.add(0, new Department());
+        model.addAttribute("departments", departments);
+        List<EducationalLevel> educationalLevels = educationalLevelService.findAll();
+        educationalLevels.add(0, new EducationalLevel());
+        model.addAttribute("educationalLevels", educationalLevels);
         return "recruitment/advanced_search";
     }
 
