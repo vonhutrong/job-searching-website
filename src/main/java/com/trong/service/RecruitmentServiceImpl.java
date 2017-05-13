@@ -77,7 +77,7 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
         if (advancedSearchForm.getEducationalLevelId() != null)
             query.where(recruitment.educationalLevel.eq(educationalLevelRepository.findById(advancedSearchForm.getEducationalLevelId())));
         long totalPages = query.count();
-        List<Recruitment> recruitments = query.offset(pageable.getPageNumber() * pageable.getPageSize()).limit(pageable.getPageSize()).list(recruitment);
+        List<Recruitment> recruitments = query.offset(pageable.getPageNumber() * pageable.getPageSize()).limit(pageable.getPageSize()).orderBy(recruitment.createdDatetime.desc()).list(recruitment);
         return new PageImpl<Recruitment>(recruitments, pageable, totalPages);
     }
 }
