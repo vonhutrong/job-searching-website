@@ -4,15 +4,17 @@ import com.trong.form.EmployeeAccountForm;
 import com.trong.form.EmployerAccountForm;
 import com.trong.model.Employee;
 import com.trong.model.Employer;
+import com.trong.model.Recruitment;
 import com.trong.model.User;
-import com.trong.service.EmployeeService;
-import com.trong.service.EmployerService;
-import com.trong.service.NotificationService;
-import com.trong.service.RoleService;
+import com.trong.service.*;
+import com.trong.util.PageWrapper;
 import com.trong.validation.EmployerAccountFormValidator;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,14 +43,16 @@ public class MainController {
     private final EmployerService employerService;
     private final PasswordEncoder passwordEncoder;
     private final NotificationService notificationService;
+    private final RecruitmentService recruitmentService;
 
     @Autowired
-    public MainController(RoleService roleService, EmployeeService employeeService, EmployerService employerService, PasswordEncoder passwordEncoder, NotificationService notificationService) {
+    public MainController(RoleService roleService, EmployeeService employeeService, EmployerService employerService, PasswordEncoder passwordEncoder, NotificationService notificationService, RecruitmentService recruitmentService) {
         this.roleService = roleService;
         this.employeeService = employeeService;
         this.employerService = employerService;
         this.passwordEncoder = passwordEncoder;
         this.notificationService = notificationService;
+        this.recruitmentService = recruitmentService;
     }
 
     @GetMapping("/")
@@ -184,5 +188,15 @@ public class MainController {
     @GetMapping("/login")
     public String loginPage() {
         return redirectToDefaultPageOfUserType("/login");
+    }
+
+    @GetMapping("/details")
+    public String viewDetails(@PageableDefault(size = 5) Pageable pageable, @Param("employerId") Long employerId, Model model) {
+        Employer employer = employerService.findById(employerId);
+        Page<Recruitment> recruitments = recruitmentService.findByEmployer(employer, pageable);
+        PageWrapper<Recruitment> page = new PageWrapper<Recruitment>(recruitments, "/details");
+        model.addAttribute("employer", employer);
+        model.addAttribute("page", page);
+        return "employer/details";
     }
 }

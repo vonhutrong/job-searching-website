@@ -24,64 +24,78 @@
     </th:block>
 
     <th:block th:fragment="sign-up">
-    <form action="#" th:action="@{/register/employer}" th:object="${employerAccountForm}" method="post" enctype="multipart/form-data">
-        <h2>Nhà tuyển dụng đăng ký</h2>
+        <form action="#" th:action="@{/register/employer}" th:object="${employerAccountForm}" method="post" enctype="multipart/form-data">
+            <h2>Nhà tuyển dụng đăng ký</h2>
 
-        <h3>Thông tin đăng nhập</h3>
-        <div class="form-group">
-            <label>Email</label>
-            <input class="form-control" type="text" th:field="*{email}"/>
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
-        </div>
-        <div class="form-group">
-            <label>Mật khẩu</label>
-            <input class="form-control" type="password" th:field="*{password}"/>
-            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
-        </div>
-        <div class="form-group">
-            <label>Gõ lại mật khẩu</label>
-            <input class="form-control" type="password" th:field="*{passwordConfirm}"/>
-            <span th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"/>
-        </div>
+            <h3>Thông tin đăng nhập</h3>
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" type="text" th:field="*{email}"/>
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input class="form-control" type="password" th:field="*{password}"/>
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
+            </div>
+            <div class="form-group">
+                <label>Gõ lại mật khẩu</label>
+                <input class="form-control" type="password" th:field="*{passwordConfirm}"/>
+                <span th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"/>
+            </div>
 
-        <h3>Thông tin công ty</h3>
-        <div class="form-group">
-            <label>Tên công ty</label>
-            <input class="form-control" type="text" th:field="*{name}"/>
-            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"/>
-        </div>
-        <div class="form-group">
-            <label>Sơ lược công ty</label>
-            <textarea class="form-control" th:field="*{description}"></textarea>
-            <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"/>
-        </div>
-        <div class="form-group">
-            <label>Logo</label>
-            <input class="form-control" th:field="*{logo}" type="file"/>
-            <span th:if="${#fields.hasErrors('logo')}" th:errors="*{logo}"/>
-        </div>
+            <h3>Thông tin công ty</h3>
+            <div class="form-group">
+                <label>Tên công ty</label>
+                <input class="form-control" type="text" th:field="*{name}"/>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"/>
+            </div>
+            <div class="form-group">
+                <label>Sơ lược công ty</label>
+                <textarea class="form-control" th:field="*{description}"></textarea>
+                <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"/>
+            </div>
+            <div class="form-group">
+                <label>Logo</label>
+                <input class="form-control" th:field="*{logo}" type="file"/>
+                <span th:if="${#fields.hasErrors('logo')}" th:errors="*{logo}"/>
+            </div>
 
-        <h3>Thông tin liên hệ</h3>
-        <div class="form-group">
-            <label>Địa chỉ</label>
-            <input class="form-control" type="text" th:field="*{address}"/>
-            <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"/>
-        </div>
-        <div class="form-group">
-            <label>Điện thoại</label>
-            <input class="form-control" type="text" th:field="*{phoneNumber}"/>
-            <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"/>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input class="form-control" type="text" th:field="*{contactEmail}"/>
-            <span th:if="${#fields.hasErrors('contactEmail')}" th:errors="*{contactEmail}"/>
-        </div>
+            <h3>Thông tin liên hệ</h3>
+            <div class="form-group">
+                <label>Địa chỉ</label>
+                <input class="form-control" type="text" th:field="*{address}"/>
+                <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"/>
+            </div>
+            <div class="form-group">
+                <label>Điện thoại</label>
+                <input class="form-control" type="text" th:field="*{phoneNumber}"/>
+                <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"/>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" type="text" th:field="*{contactEmail}"/>
+                <span th:if="${#fields.hasErrors('contactEmail')}" th:errors="*{contactEmail}"/>
+            </div>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Đăng ký</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Đăng ký</button>
+            </div>
+        </form>
+    </th:block>
+
+    <th:block th:fragment="details">
+        <h4 th:text="${employer.name}" style="color: #0a6ebd;"/>
+        <div class="row">
+        <div class="col-md-6"><i>Địa chỉ: <span th:text="${employer.address}"/></i></div>
+        <div class="col-md-6 text-right">
+            <a class="btn btn-default btn-sm" href="#recruitments">Các tin tuyển dụng</a>
         </div>
-    </form>
-</th:block>
+        </div>
+        <b><p th:utext="${#strings.replace( #strings.escapeXml( employer.description ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}"/></b>
+        <b>Số điện thoại: <span th:text="${employer.phoneNumber}"/></b>
+        <br/>
+        <b>Email liên hệ: <span th:text="${employer.contactEmail}"/></b>
+    </th:block>
 </body>
 </html>

@@ -101,15 +101,16 @@
     <th:block th:fragment="review">
         <div th:each="recruitment : ${page.content}" class="row" style="padding-bottom: 1em">
             <div class="col-md-2">
-                <img th:src="@{/logo(logoPath=${recruitment.employer.logoPath})}" width="100em" height="100em"/>
+                <span style="display: inline-block; height: 100%; vertical-align: middle;"/>
+                <img th:src="@{/logo(logoPath=${recruitment.employer.logoPath})}" width="100%" style="vertical-align: middle;"/>
             </div>
-            <div>
-                <b class="text-uppercase" th:text="${recruitment.employer.name}">Công việc</b><br/>
+            <div class="col-md-10">
+                <a th:href="@{/details(employerId=${recruitment.employer.id})}"><b class="text-uppercase" th:text="${recruitment.employer.name}"/></a><br/>
                 Thời gian đăng: <i th:text="${#dates.format(recruitment.createdDatetime, 'hh:mm dd-MM-yyyy')}"/><br/>
                 <p class="text-capitalize" th:text="${recruitment.title}"/>
                 <a th:href="@{/recruitment/details(id=${recruitment.id})}">Chi tiết</a>
             </div>
-            <hr/>
+            <hr style="border: 0; clear: both; display: block; width: 96%; background-color: lightgray; height: 1px;"/>
         </div>
     </th:block>
 
@@ -130,7 +131,7 @@
     </th:block>
 
     <th:block th:fragment="details">
-        <p><h4 class="text-uppercase" th:text="${recruitment.employer.name}">Công ty</h4>
+        <p><a th:href="@{/details(employerId=${recruitment.employer.id})}"><h4 class="text-uppercase" th:text="${recruitment.employer.name}"/></a>
             <label th:text="${recruitment.title}">Công việc</label><br/>
             <i><span th:text="${recruitment.employer.address}">Địa chỉ</span></i></p><br/>
         <b>Mô tả chi tiết công việc</b><br/>
