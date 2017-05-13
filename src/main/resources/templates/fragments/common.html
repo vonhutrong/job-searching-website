@@ -9,10 +9,6 @@
             body {
                 background: #F6F6F6;
             }
-
-            div.my-footer {
-                padding-top: 3em;
-            }
         </style>
     </th:block>
 </head>
@@ -118,7 +114,7 @@
     </th:block>
 
     <th:block th:fragment="footer">
-        <div class="my-footer">
+        <div style="padding-top: 3em; display: inline-block;">
             <div>
                 <img src="../../public/img/banner.jpg" width="100%" th:src="@{/img/bottom-banner.jpg}"/>
             </div>
