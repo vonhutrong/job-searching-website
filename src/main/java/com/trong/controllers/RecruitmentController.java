@@ -6,10 +6,7 @@ import com.trong.model.ApplyHistory;
 import com.trong.model.Department;
 import com.trong.model.EducationalLevel;
 import com.trong.model.Recruitment;
-import com.trong.service.ApplyHistoryService;
-import com.trong.service.DepartmentService;
-import com.trong.service.EducationalLevelService;
-import com.trong.service.RecruitmentService;
+import com.trong.service.*;
 import com.trong.util.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,13 +36,15 @@ public class RecruitmentController {
     private final DepartmentService departmentService;
     private final ApplyHistoryService applyHistoryService;
     private final EducationalLevelService educationalLevelService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public RecruitmentController(RecruitmentService recruitmentService, DepartmentService departmentService, ApplyHistoryService applyHistoryService, EducationalLevelService educationalLevelService) {
+    public RecruitmentController(RecruitmentService recruitmentService, DepartmentService departmentService, ApplyHistoryService applyHistoryService, EducationalLevelService educationalLevelService, NotificationService notificationService) {
         this.recruitmentService = recruitmentService;
         this.departmentService = departmentService;
         this.applyHistoryService = applyHistoryService;
         this.educationalLevelService = educationalLevelService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("")
@@ -58,7 +57,12 @@ public class RecruitmentController {
 
     @RequestMapping("/details")
     public String details(@RequestParam("id") Long id, Model model) {
-        model.addAttribute("recruitment", recruitmentService.findById(id));
+        Recruitment recruitment = recruitmentService.findById(id);
+        if (null == recruitment) {
+            notificationService.addErrorMessage("Invalid.recruitmentId");
+            return "error";
+        }
+        model.addAttribute("recruitment", recruitment);
         return "recruitment/details";
     }
 
