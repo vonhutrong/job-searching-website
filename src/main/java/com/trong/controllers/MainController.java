@@ -193,6 +193,10 @@ public class MainController {
     @GetMapping("/details")
     public String viewDetails(@PageableDefault(size = 5) Pageable pageable, @Param("employerId") Long employerId, Model model) {
         Employer employer = employerService.findById(employerId);
+        if (null == employer) {
+            notificationService.addErrorMessage("Invalid.employerId");
+            return "error";
+        }
         Page<Recruitment> recruitments = recruitmentService.findByEmployer(employer, pageable);
         PageWrapper<Recruitment> page = new PageWrapper<Recruitment>(recruitments, "/details");
         model.addAttribute("employer", employer);
