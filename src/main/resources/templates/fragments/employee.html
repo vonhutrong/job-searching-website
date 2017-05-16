@@ -5,27 +5,36 @@
 <body>
 
     <th:block th:fragment="sign-up">
-        <form action="#" th:action="@{/register/employee}" th:object="${employeeAccountForm}" method="post">
-            <h4>Đăng ký tài khoản người tìm việc</h4>
+        <form class="form-horizontal" th:action="@{/register/employee}" th:object="${employeeAccountForm}" method="post">
+            <h4 class="text-center">Đăng ký tài khoản Người tìm việc</h4>
+            <br/>
             <div class="form-group">
-                <label>Họ và tên</label>
-                <input class="form-control" type="text" th:field="*{name}"/>
-                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">email</span>
+                <label class="col-sm-3 text-left">Họ và tên</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" th:field="*{name}"/>
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">email</span>
+                </div>
             </div>
             <div class="form-group">
-                <label>Email</label>
-                <input class="form-control" type="text" th:field="*{email}"/>
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email</span>
+                <label class="col-sm-3 text-left">Email</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" th:field="*{email}"/>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email</span>
+                </div>
             </div>
             <div class="form-group">
-                <label>Mật khẩu</label>
-                <input class="form-control" type="password" th:field="*{password}"/>
-                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password</span>
+                <label class="col-sm-3 text-left">Mật khẩu</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="password" th:field="*{password}"/>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password</span>
+                </div>
             </div>
             <div class="form-group">
-                <label>Gõ lại mật khẩu</label>
-                <input class="form-control" type="password" th:field="*{passwordConfirm}"/>
-                <span th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">passwordConfirm</span>
+                <label class="col-sm-3 text-left">Gõ lại mật khẩu</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="password" th:field="*{passwordConfirm}"/>
+                    <span th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">passwordConfirm</span>
+                </div>
             </div>
             <div class="text-center">
                 <button class="btn btn-primary" type="submit">Đăng ký</button>
@@ -41,9 +50,11 @@
                 </div>
                 <ul class="nav navbar-nav">
                     <li><a th:href="@{/recruitment}">Trang chủ</a></li>
-                    <li><a th:href="@{/employee/applyManagement}">Quản lý hồ sơ</a></li>
+                    <li><a th:href="@{/recruitment/advancedSearch}">Tìm kiếm nâng cao</a></li>
+                    <li><a th:href="@{/employee/applyManagement}">Xem tình trạng đơn</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">(<span th:text="${#authentication.name}"/>)</a></li>
                     <li><a href="#" onclick="document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span> Đăng xuất</a></li>
                     <form id="logout-form" th:action="@{/logout}" method="POST"></form>
                 </ul>
@@ -52,20 +63,27 @@
     </th:block>
 
     <th:block th:fragment="apply-recruitment">
-        <form action="#" th:action="@{/employee/apply}" method="post" th:object="${applyForm}" enctype="multipart/form-data">
-            <h2>Nộp đơn trực tuyến</h2>
+        <form class="form-horizontal" th:action="@{/employee/apply}" method="post" th:object="${applyForm}" enctype="multipart/form-data">
+            <h4 class="text-center">Nộp đơn ứng tuyển</h4>
+            <br/>
             <div class="form-group">
-                <label>Chức danh</label>
-                <input class="form-control" th:value="${recruitment.title}" disabled="disabled"/>
+                <label class="col-sm-3 text-left">Chức danh</label>
+                <div class="col-sm-6">
+                    <input class="form-control" th:value="${recruitment.title}" disabled="disabled"/>
+                </div>
             </div>
             <div class="form-group">
-                <label>Tên công ty</label>
-                <input class="form-control" th:value="${recruitment.employer.name}" disabled="disabled"/>
+                <label class="col-sm-3 text-left">Tên công ty</label>
+                <div class="col-sm-6">
+                    <input class="form-control" th:value="${recruitment.employer.name}" disabled="disabled"/>
+                </div>
             </div>
             <div class="form-group">
-                Chọn hồ sơ
-                <input class="form-control" type="file" th:field="*{cv}"/>
-                <span th:if="${#fields.hasErrors('cv')}" th:errors="*{cv}"/>
+                <label class="col-sm-3 text-left">Chọn hồ sơ</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="file" th:field="*{cv}"/>
+                    <span th:if="${#fields.hasErrors('cv')}" th:errors="*{cv}"/>
+                </div>
             </div>
             <input type="hidden" th:value="${recruitment.id}" th:attr="name='recruitmentId'"/>
             <span th:if="${#fields.hasErrors('recruitmentId')}" th:errors="*{recruitmentId}"/>
@@ -78,10 +96,11 @@
     <th:block th:fragment="apply-management">
         <div class="well" th:each="applyHistory : ${page.content}">
             <a th:href="@{/recruitment/details(id=${applyHistory.recruitment.id})}">
-                <label th:text="${applyHistory.recruitment.employer.name}"></label>
+                <label class="text-uppercase" th:text="${applyHistory.recruitment.employer.name}"/>
             </a><br/>
-            <i><span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"></span></i><br/>
-            Trạng thái: <span th:text="${applyHistory.approved} == null ? 'Đang chờ' : (${applyHistory.approved} ? 'Đạt' : 'Không đạt')"></span>
+            <i>Thời gian nộp: <span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"></span></i><br/>
+            Trạng thái: <span th:text="${applyHistory.approved} == null ? 'Đang chờ' : (${applyHistory.approved} ? 'Đạt' : 'Không đạt')"/>
+            <hr style="border: 0; clear: both; display: block; width: 96%; background-color: lightgray; height: 1px;"/>
         </div>
     </th:block>
 </body>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <th:block th:replace="fragments/common::head"/>
-    <title>Chi tiết công việc</title>
+    <title>Chi tiết Tin tuyển dụng</title>
 </head>
 <body>
 
@@ -13,11 +13,10 @@
                 <th:block th:include="fragments/recruitment::details"/>
             </div>
         </div>
-
-        <br/>
         <div sec:authorize="hasRole('ROLE_EMPLOYER')">
             <div class="col-lg-8 col-lg-offset-2">
-                <label>Danh sách người nộp đơn:</label>
+                <hr style="border: 0; clear: both; display: block; width: 96%; background-color: lightgray; height: 1px;"/>
+                <h4>Danh sách người nộp đơn:</h4>
                 <th:block th:include="fragments/recruitment::review-apply"/>
             </div>
         </div>

@@ -27,13 +27,14 @@
                     </div>
                     <ul class="nav navbar-nav">
                         <li><a th:href="@{/recruitment}">Trang chủ</a></li>
+                        <li><a th:href="@{/recruitment/advancedSearch}">Tìm kiếm nâng cao</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-lock"/> Đăng ký <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a th:href="@{/register/employee}"><span class="glyphicon glyphicon-user"/> Tài khoản cá nhân</a></li>
-                                <li><a th:href="@{/register/employer}"><span class="glyphicon glyphicon-briefcase"/> Tài khoản danh nghiệp</a></li>
+                                <li><a th:href="@{/register/employee}"><span class="glyphicon glyphicon-user"/> Tài khoản Người tìm việc</a></li>
+                                <li><a th:href="@{/register/employer}"><span class="glyphicon glyphicon-briefcase"/> Tài khoản Nhà tìm việc</a></li>
                             </ul>
                         </li>
                         <li><a href="#" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"/> Đăng nhập</a></li>

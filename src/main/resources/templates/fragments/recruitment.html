@@ -37,16 +37,16 @@
     </th:block>
 
     <th:block th:fragment="advanced-search">
-        <h3 class="text-center">Tìm kiếm nâng cao</h3>
+        <h4 class="text-center">Tìm kiếm nâng cao</h4>
         <form class="form-horizontal" th:action="@{/recruitment/advancedSearchProcessing}" th:object="${advancedSearchForm}" method="get">
             <div class="form-group">
-                <label class="col-sm-3 text-right">Từ khóa</label>
+                <label class="col-sm-3 text-left">Từ khóa</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" th:field="*{keyword}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-right">Ngành nghề</label>
+                <label class="col-sm-3 text-left">Ngành nghề</label>
                 <div class="col-sm-6">
                     <select class="form-control" th:field="*{departmentId}">
                         <div th:each="i : ${departments}">
@@ -57,32 +57,32 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-right">Yêu cầu giới tính</label>
+                <label class="col-sm-3 text-left">Yêu cầu giới tính</label>
                 <div class="col-sm-6">
                     <label><input type="radio" name="gender" th:field="*{requiredFemale}" th:value="false"/> Nam</label>
                     <label><input type="radio" name="gender" th:field="*{requiredFemale}" th:value="true"/> Nữ</label>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-right">Độ tuổi</label>
+                <label class="col-sm-3 text-left">Độ tuổi</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="number" th:field="*{averageAge}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-right">Năm kinh nghiệm</label>
+                <label class="col-sm-3 text-left">Năm kinh nghiệm</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="number" th:field="*{yearsOfExperience}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-right">Mức lương</label>
+                <label class="col-sm-3 text-left">Mức lương</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="number" th:field="*{salary}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-right">Trình độ học vấn</label>
+                <label class="col-sm-3 text-left">Trình độ học vấn</label>
                 <div class="col-sm-6">
                     <select class="form-control" th:field="*{educationalLevelId}">
                         <div th:each="i : ${educationalLevels}">
@@ -116,16 +116,17 @@
 
     <th:block th:fragment="review-apply">
         <div class="well" th:each="applyHistory : ${recruitment.applyHistories}" style="padding-bottom: 1em">
-            <span th:text="${applyHistory.employee.name}"></span> - Lúc: <span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"></span>
-            <a th:href="@{/recruitment/cv(applyHistoryId=${applyHistory.id})}">Đơn xin việc</a>
+            <span th:text="${applyHistory.employee.name}"/> - Lúc: <span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"/>
+            <br/>
+            <a th:href="@{/recruitment/cv(applyHistoryId=${applyHistory.id})}">Đơn ứng tuyển</a>
             <div th:if="${applyHistory.approved == null}">
-                <span>Đánh giá hồ sơ</span>
-                <a th:href="@{/employer/updateApplication(applyHistoryId=${applyHistory.id}, approved=true)}">Đạt</a>
-                <a th:href="@{/employer/updateApplication(applyHistoryId=${applyHistory.id}, approved=false)}">Không đạt</a>
+                <span>Đánh giá hồ sơ: </span>
+                <a class="btn btn-xs btn-success" th:href="@{/employer/updateApplication(applyHistoryId=${applyHistory.id}, approved=true)}">Đạt</a>
+                <a class="btn btn-xs btn-danger" th:href="@{/employer/updateApplication(applyHistoryId=${applyHistory.id}, approved=false)}">Không đạt</a>
             </div>
             <div th:if="${applyHistory.approved != null}">
                 <span>Tình trạng đánh giá: </span>
-                <span th:text="${applyHistory.approved} ? 'Đạt' : 'Không đạt'"></span>
+                <span th:text="${applyHistory.approved} ? 'Đạt' : 'Không đạt'"/>
             </div>
         </div>
     </th:block>
