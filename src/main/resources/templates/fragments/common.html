@@ -48,6 +48,9 @@
         <div sec:authorize="hasRole('ROLE_EMPLOYER')">
             <th:block th:include="fragments/employer::header"/>
         </div>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <th:block th:include="fragments/admin::header"/>
+        </div>
 
         <div class="col-md-8 col-sm-offset-2 text-center" th:with="notifyMessages=${session[T(com.trong.service.NotificationServiceImpl).NOTIFY_MSG_SESSION_KEY]}">
             <div th:each="msg : ${notifyMessages}" th:text="#{${msg.text}}"

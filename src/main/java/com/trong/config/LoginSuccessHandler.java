@@ -38,12 +38,16 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         boolean isEmployee = false;
         boolean isEmployer = false;
+        boolean isAdmin = false;
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_EMPLOYEE")) {
                 isEmployee = true;
                 break;
             } else if (grantedAuthority.getAuthority().equals("ROLE_EMPLOYER")) {
                 isEmployer = true;
+                break;
+            } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+                isAdmin = true;
                 break;
             }
         }
@@ -52,6 +56,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             return "/recruitment";
         } else if (isEmployer) {
             return "/employer/recruitmentManagement";
+        } else if (isAdmin) {
+            return "/admin";
         } else {
             throw new IllegalStateException();
         }

@@ -70,6 +70,8 @@ public class MainController {
                     return "redirect:/recruitment";
                 } else if (grantedAuthority.getAuthority().equals("ROLE_EMPLOYER")) {
                     return "redirect:/employer/recruitmentManagement";
+                } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+                    return "redirect:/admin";
                 }
             }
         }
