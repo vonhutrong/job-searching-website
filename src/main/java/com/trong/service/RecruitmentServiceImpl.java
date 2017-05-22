@@ -4,6 +4,7 @@ import com.mysema.query.jpa.impl.JPAQuery;
 import com.trong.form.AdvancedSearchForm;
 import com.trong.model.Employer;
 import com.trong.model.QRecruitment;
+import com.trong.model.QRecruitmentReport;
 import com.trong.model.Recruitment;
 import com.trong.repository.DepartmentRepository;
 import com.trong.repository.EducationalLevelRepository;
@@ -85,5 +86,23 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
         long totalPages = query.count();
         List<Recruitment> recruitments = query.offset(pageable.getPageNumber() * pageable.getPageSize()).limit(pageable.getPageSize()).orderBy(recruitment.createdDatetime.desc()).list(recruitment);
         return new PageImpl<Recruitment>(recruitments, pageable, totalPages);
+    }
+
+    @Override
+    public Page<Recruitment> getTopReportedRecruitments(Pageable pageable) {
+        QRecruitment recruitment = QRecruitment.recruitment;
+        QRecruitmentReport recruitmentReport = QRecruitmentReport.recruitmentReport;
+
+        JPAQuery query = from(recruitment)
+                .rightJoin(recruitment.recruitmentReports, recruitmentReport);
+        query.groupBy(recruitment.id);
+        query.orderBy(recruitmentReport.id.countDistinct().desc());
+
+        long total = query.list(recruitment).size();
+        List<Recruitment> recruitments = query
+                .offset(pageable.getPageNumber() * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .list(recruitment);
+        return new PageImpl<Recruitment>(recruitments, pageable, total);
     }
 }

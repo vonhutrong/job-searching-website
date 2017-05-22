@@ -253,5 +253,14 @@
         </form>
     </th:block>
 
+    <th:block th:fragment="review-report">
+        <div th:each="report : ${recruitment.recruitmentReports}">
+            <b>Người dùng:</b> <span th:text="${report.employee.name}"/> (<span th:text="${report.employee.user.email}"/>)
+            <br/>
+            <b>Nội dung báo cáo:</b> <span th:text="${report.message}"/>
+            <br/>
+            <hr style="border: 0; clear: both; display: block; width: 96%; background-color: lightgray; height: 1px;"/>
+        </div>
+    </th:block>
 </body>
 </html>

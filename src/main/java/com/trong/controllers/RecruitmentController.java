@@ -58,13 +58,15 @@ public class RecruitmentController {
     @RequestMapping("/details")
     public String details(@RequestParam("id") Long id, Model model, Principal principal) {
         Recruitment recruitment = recruitmentService.findById(id);
-        Employee employee = employeeService.findByEmail(principal.getName());
         if (null == recruitment) {
             notificationService.addErrorMessage("Invalid.recruitmentId");
             return "error";
         }
         model.addAttribute("recruitment", recruitment);
-        model.addAttribute("isHasReported", recruitmentReportService.isHasReported(employee, recruitment));
+        if (null != principal) {
+            Employee employee = employeeService.findByEmail(principal.getName());
+            model.addAttribute("isHasReported", recruitmentReportService.isHasReported(employee, recruitment));
+        }
         return "recruitment/details";
     }
 

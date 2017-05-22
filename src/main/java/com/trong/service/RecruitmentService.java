@@ -16,4 +16,6 @@ public interface RecruitmentService {
     Page<Recruitment> findByEmployer(Employer employer, Pageable pageable);
 
     Page<Recruitment> search(AdvancedSearchForm advancedSearchForm, Pageable pageable);
+
+    Page<Recruitment> getTopReportedRecruitments(Pageable pageable);
 }
