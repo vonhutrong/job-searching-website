@@ -133,8 +133,8 @@
 
     <th:block th:fragment="details">
         <p><a th:href="@{/details(employerId=${recruitment.employer.id})}"><h4 class="text-uppercase" th:text="${recruitment.employer.name}"/></a>
-            <label th:text="${recruitment.title}">Công việc</label><br/>
-            <i><span th:text="${recruitment.employer.address}">Địa chỉ</span></i></p><br/>
+            <b>Công việc: </b> <label th:text="${recruitment.title}"/><br/>
+            <i><b>Địa chỉ: </b><span th:text="${recruitment.employer.address}"/></i></p><br/>
         <b>Mô tả chi tiết công việc</b><br/>
         <p th:utext="${#strings.replace( #strings.escapeXml( recruitment.content ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}" ></p>
 
