@@ -67,6 +67,10 @@ public class RecruitmentController {
             Employee employee = employeeService.findByEmail(principal.getName());
             model.addAttribute("isHasReported", recruitmentReportService.isHasReported(employee, recruitment));
         }
+
+        if (recruitment.getBanned()) {
+            notificationService.addErrorMessage("Banned.recruitment");
+        }
         return "recruitment/details";
     }
 
