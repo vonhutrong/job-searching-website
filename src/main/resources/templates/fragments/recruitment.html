@@ -159,8 +159,13 @@
         <br/>
 
         <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
-            <div class="text-center">
-                <a class="btn btn-primary" th:href="@{/employee/apply(recruitmentId=${recruitment.id})}">Nộp đơn</a>
+            <div class="row">
+                <div class="col-sm-9 text-center">
+                    <a class="btn btn-primary" th:href="@{/employee/apply(recruitmentId=${recruitment.id})}">Nộp đơn</a>
+                </div>
+                <div class="col-sm-3 text-right" th:if="${not isHasReported}">
+                    <a class="btn btn-warning" th:href="@{/recruitment/report(recruitmentId=${recruitment.id})}">Báo cáo nội dung xấu</a><br/>
+                </div>
             </div>
         </div>
     </th:block>
@@ -224,6 +229,26 @@
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Đăng tin</button>
+            </div>
+        </form>
+    </th:block>
+
+    <th:block th:fragment="report">
+        <form class="form-horizontal" th:action="@{/recruitment/report}" method="post" th:object="${recruitmentReportForm}">
+            <h4 class="text-center">Báo cáo tin tuyển dụng xấu</h4>
+            <br/>
+
+            <label><b>Bạn muốn báo cáo xấu đối với tin tuyển dụng:</b></label> <span th:text="${recruitment.title}"/><br/>
+            <label><b>Của nhà tuyển dụng:</b></label> <span th:text="${recruitment.employer.name}"/><br/>
+            <div class="form-group">
+                <label class="col-sm-3 text-left">Lý do báo cáo:</label>
+                <div class="col-sm-9">
+                    <textarea type="text" style="min-width: 100%" th:field="*{message}"/>
+                </div>
+            </div>
+            <input type="hidden" th:value="${recruitment.id}" th:attr="name='recruitmentId'"/>
+            <div class="form-group text-center">
+                <button class="btn btn-warning" type="submit">Xác nhận</button>
             </div>
         </form>
     </th:block>

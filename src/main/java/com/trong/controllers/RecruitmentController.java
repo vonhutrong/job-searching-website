@@ -1,11 +1,9 @@
 package com.trong.controllers;
 
 import com.trong.form.AdvancedSearchForm;
+import com.trong.form.RecruitmentReportForm;
 import com.trong.form.SearchForm;
-import com.trong.model.ApplyHistory;
-import com.trong.model.Department;
-import com.trong.model.EducationalLevel;
-import com.trong.model.Recruitment;
+import com.trong.model.*;
 import com.trong.service.*;
 import com.trong.util.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +14,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -37,14 +33,18 @@ public class RecruitmentController {
     private final ApplyHistoryService applyHistoryService;
     private final EducationalLevelService educationalLevelService;
     private final NotificationService notificationService;
+    private final RecruitmentReportService recruitmentReportService;
+    private final EmployeeService employeeService;
 
     @Autowired
-    public RecruitmentController(RecruitmentService recruitmentService, DepartmentService departmentService, ApplyHistoryService applyHistoryService, EducationalLevelService educationalLevelService, NotificationService notificationService) {
+    public RecruitmentController(RecruitmentService recruitmentService, DepartmentService departmentService, ApplyHistoryService applyHistoryService, EducationalLevelService educationalLevelService, NotificationService notificationService, RecruitmentReportService recruitmentReportService, EmployeeService employeeService) {
         this.recruitmentService = recruitmentService;
         this.departmentService = departmentService;
         this.applyHistoryService = applyHistoryService;
         this.educationalLevelService = educationalLevelService;
         this.notificationService = notificationService;
+        this.recruitmentReportService = recruitmentReportService;
+        this.employeeService = employeeService;
     }
 
     @GetMapping("")
@@ -56,13 +56,15 @@ public class RecruitmentController {
     }
 
     @RequestMapping("/details")
-    public String details(@RequestParam("id") Long id, Model model) {
+    public String details(@RequestParam("id") Long id, Model model, Principal principal) {
         Recruitment recruitment = recruitmentService.findById(id);
+        Employee employee = employeeService.findByEmail(principal.getName());
         if (null == recruitment) {
             notificationService.addErrorMessage("Invalid.recruitmentId");
             return "error";
         }
         model.addAttribute("recruitment", recruitment);
+        model.addAttribute("isHasReported", recruitmentReportService.isHasReported(employee, recruitment));
         return "recruitment/details";
     }
 
@@ -89,6 +91,28 @@ public class RecruitmentController {
         String url = generateAdvancedSearchUrl(advancedSearchForm);
         model.addAttribute("page", new PageWrapper<Recruitment>(recruitments, url));
         return "recruitment/searching_result";
+    }
+
+    @GetMapping("/report")
+    public String reportRecruitment(@RequestParam("recruitmentId") Long recruitmentId, Model model) {
+        model.addAttribute("recruitment", recruitmentService.findById(recruitmentId));
+        model.addAttribute("recruitmentReportForm", new RecruitmentReportForm());
+        return "recruitment/report";
+    }
+
+    @PostMapping("/report")
+    public String report(@ModelAttribute("recruitmentReportForm")RecruitmentReportForm recruitmentReportForm, Principal principal) {
+        Employee employee = employeeService.findByEmail(principal.getName());
+        Recruitment recruitment = recruitmentService.findById(recruitmentReportForm.getRecruitmentId());
+        RecruitmentReport recruitmentReport = new RecruitmentReport();
+        recruitmentReport.setEmployee(employee);
+        recruitmentReport.setRecruitment(recruitment);
+        recruitmentReport.setMessage(recruitmentReportForm.getMessage());
+        if (null != recruitmentReportService.save(recruitmentReport))
+            notificationService.addInfoMessage("Success.reportRecruitment");
+        else
+            notificationService.addErrorMessage("Fail.reportRecruitment");
+        return "redirect:/";
     }
 
     private String generateAdvancedSearchUrl(AdvancedSearchForm advancedSearchForm) {

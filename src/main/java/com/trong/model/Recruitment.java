@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "recruitment")
 @Data
 @ToString
-@EqualsAndHashCode(exclude = {"department", "educationalLevel", "employer", "applyHistories"})
+@EqualsAndHashCode(exclude = {"department", "educationalLevel", "employer", "applyHistories", "recruitmentReports"})
 public class Recruitment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,4 +44,6 @@ public class Recruitment {
     private Employer employer;
     @OneToMany(mappedBy = "recruitment")
     private Set<ApplyHistory> applyHistories;
+    @OneToMany(mappedBy = "recruitment")
+    private Set<RecruitmentReport> recruitmentReports;
 }
