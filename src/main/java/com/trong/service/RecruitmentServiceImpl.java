@@ -42,13 +42,13 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
 
     @Override
     public Page<Recruitment> recent(Pageable pageable) {
-        return recruitmentRepository.findAllByOrderByCreatedDatetimeDesc(pageable);
+        return recruitmentRepository.findAllByBannedOrderByCreatedDatetimeDesc(false, pageable);
     }
 
     @Override
     public Page<Recruitment> searchBasic(String keyword, Long departmentId, Pageable pageable) {
         if (keyword.isEmpty() && 0 == departmentId)
-            return recruitmentRepository.findAllByOrderByCreatedDatetimeDesc(pageable);
+            return recruitmentRepository.findAllByBannedOrderByCreatedDatetimeDesc(false, pageable);
         if (keyword.isEmpty() && 0 != departmentId)
             return recruitmentRepository.findByDepartmentIdOrderByCreatedDatetimeAsc(departmentId, pageable);
         if (!keyword.isEmpty() && 0 == departmentId)

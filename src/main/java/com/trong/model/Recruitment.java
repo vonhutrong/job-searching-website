@@ -33,6 +33,7 @@ public class Recruitment {
     private Double highestSalary;
     @Column(name = "deadline_for_submission")
     private java.sql.Date deadlineForSubmission;
+    private Boolean banned;
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;

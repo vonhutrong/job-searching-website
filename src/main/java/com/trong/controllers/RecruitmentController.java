@@ -117,6 +117,15 @@ public class RecruitmentController {
         return "redirect:/";
     }
 
+    @GetMapping("/ban")
+    public String ban(@RequestParam("id") Long id) {
+        Recruitment recruitment = recruitmentService.findById(id);
+        recruitment.setBanned(true);
+        recruitmentService.save(recruitment);
+        notificationService.addInfoMessage("Success.banRecruitment");
+        return "redirect:/recruitment/details?id=" + id;
+    }
+
     private String generateAdvancedSearchUrl(AdvancedSearchForm advancedSearchForm) {
         StringBuffer stringBuffer = new StringBuffer("/recruitment/advancedSearchProcessing?");
         stringBuffer.append("keyword=" + advancedSearchForm.getKeyword());

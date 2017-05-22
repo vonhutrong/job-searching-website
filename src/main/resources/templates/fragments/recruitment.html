@@ -168,6 +168,12 @@
                 </div>
             </div>
         </div>
+
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="text-center" th:unless="${recruitment.banned}">
+                <a class="btn btn-warning" th:href="@{/recruitment/ban(id=${recruitment.id})}" onclick="return confirm('Bạn có muốn ẩn bài viết này không?')">Ẩn bài viết này</a>
+            </div>
+        </div>
     </th:block>
 
     <th:block th:fragment="content">
