@@ -47,13 +47,20 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
 
     @Override
     public Page<Recruitment> searchBasic(String keyword, Long departmentId, Pageable pageable) {
-        if (keyword.isEmpty() && 0 == departmentId)
-            return recruitmentRepository.findAllByBannedOrderByCreatedDatetimeDesc(false, pageable);
-        if (keyword.isEmpty() && 0 != departmentId)
-            return recruitmentRepository.findByDepartmentIdOrderByCreatedDatetimeAsc(departmentId, pageable);
-        if (!keyword.isEmpty() && 0 == departmentId)
-            return recruitmentRepository.findByTitleContainingIgnoreCaseOrderByCreatedDatetimeAsc(keyword, pageable);
-        return recruitmentRepository.findByTitleContainingIgnoreCaseAndDepartmentIdOrderByCreatedDatetimeAsc(keyword, departmentId, pageable);
+        QRecruitment recruitment = QRecruitment.recruitment;
+        JPAQuery query = from(recruitment);
+        query.where(recruitment.banned.eq(false));
+        if (!keyword.isEmpty())
+            query.where(recruitment.title.containsIgnoreCase(keyword));
+        if (0 != departmentId)
+            query.where(recruitment.department.id.eq(departmentId));
+        query.orderBy(recruitment.createdDatetime.desc());
+        long total = query.count();
+        List<Recruitment> recruitments = query
+                .offset(pageable.getPageNumber() * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .list(recruitment);
+        return new PageImpl<Recruitment>(recruitments, pageable, total);
     }
 
     @Override
@@ -65,6 +72,7 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
     public Page<Recruitment> search(AdvancedSearchForm advancedSearchForm, Pageable pageable) {
         QRecruitment recruitment = QRecruitment.recruitment;
         JPAQuery query = from(recruitment);
+
         if (advancedSearchForm.getKeyword() != null && !advancedSearchForm.getKeyword().trim().isEmpty())
             query.where(recruitment.title.contains(advancedSearchForm.getKeyword()));
         if (advancedSearchForm.getDepartmentId() != null)
@@ -83,8 +91,14 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
         }
         if (advancedSearchForm.getEducationalLevelId() != null)
             query.where(recruitment.educationalLevel.eq(educationalLevelRepository.findById(advancedSearchForm.getEducationalLevelId())));
+        query.where(recruitment.banned.eq(false));
+        query.orderBy(recruitment.createdDatetime.desc());
+
         long totalPages = query.count();
-        List<Recruitment> recruitments = query.offset(pageable.getPageNumber() * pageable.getPageSize()).limit(pageable.getPageSize()).orderBy(recruitment.createdDatetime.desc()).list(recruitment);
+        List<Recruitment> recruitments = query
+                .offset(pageable.getPageNumber() * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .list(recruitment);
         return new PageImpl<Recruitment>(recruitments, pageable, totalPages);
     }
 
