@@ -42,14 +42,14 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
 
     @Override
     public Page<Recruitment> recent(Pageable pageable) {
-        return recruitmentRepository.findAllByBannedOrderByCreatedDatetimeDesc(false, pageable);
+        return recruitmentRepository.findByBannedIsNullOrBannedIsFalseOrderByCreatedDatetimeDesc(pageable);
     }
 
     @Override
     public Page<Recruitment> searchBasic(String keyword, Long departmentId, Pageable pageable) {
         QRecruitment recruitment = QRecruitment.recruitment;
         JPAQuery query = from(recruitment);
-        query.where(recruitment.banned.eq(false));
+        query.where(recruitment.banned.isNull().or(recruitment.banned.eq(false)));
         if (!keyword.isEmpty())
             query.where(recruitment.title.containsIgnoreCase(keyword));
         if (0 != departmentId)
@@ -91,7 +91,7 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
         }
         if (advancedSearchForm.getEducationalLevelId() != null)
             query.where(recruitment.educationalLevel.eq(educationalLevelRepository.findById(advancedSearchForm.getEducationalLevelId())));
-        query.where(recruitment.banned.eq(false));
+        query.where(recruitment.banned.isNull().or(recruitment.banned.eq(false)));
         query.orderBy(recruitment.createdDatetime.desc());
 
         long totalPages = query.count();
@@ -113,6 +113,25 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
         query.orderBy(recruitmentReport.id.countDistinct().desc());
 
         long total = query.list(recruitment).size();
+        List<Recruitment> recruitments = query
+                .offset(pageable.getPageNumber() * pageable.getPageSize())
+                .limit(pageable.getPageSize())
+                .list(recruitment);
+        return new PageImpl<Recruitment>(recruitments, pageable, total);
+    }
+
+    @Override
+    public Page<Recruitment> findByEmployerNotBanned(Employer employer, Pageable pageable) {
+        QRecruitment recruitment = QRecruitment.recruitment;
+        JPAQuery query = from(recruitment);
+        query.where(recruitment.employer.eq(employer))
+                .where(recruitment.banned.isNull().or(recruitment.banned.eq(false)))
+                .orderBy(recruitment.createdDatetime.desc());
+        return generateRecruitmentPage(recruitment, query, pageable);
+    }
+
+    private Page<Recruitment> generateRecruitmentPage(QRecruitment recruitment, JPAQuery query, Pageable pageable) {
+        long total = query.count();
         List<Recruitment> recruitments = query
                 .offset(pageable.getPageNumber() * pageable.getPageSize())
                 .limit(pageable.getPageSize())

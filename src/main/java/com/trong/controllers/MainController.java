@@ -199,7 +199,7 @@ public class MainController {
             notificationService.addErrorMessage("Invalid.employerId");
             return "error";
         }
-        Page<Recruitment> recruitments = recruitmentService.findByEmployer(employer, pageable);
+        Page<Recruitment> recruitments = recruitmentService.findByEmployerNotBanned(employer, pageable);
         PageWrapper<Recruitment> page = new PageWrapper<Recruitment>(recruitments, "/details");
         model.addAttribute("employer", employer);
         model.addAttribute("page", page);

@@ -68,7 +68,7 @@ public class RecruitmentController {
             model.addAttribute("isHasReported", recruitmentReportService.isHasReported(employee, recruitment));
         }
 
-        if (recruitment.getBanned()) {
+        if (recruitment.getBanned() != null && recruitment.getBanned()) {
             notificationService.addErrorMessage("Banned.recruitment");
         }
         return "recruitment/details";

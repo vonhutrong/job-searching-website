@@ -18,4 +18,6 @@ public interface RecruitmentService {
     Page<Recruitment> search(AdvancedSearchForm advancedSearchForm, Pageable pageable);
 
     Page<Recruitment> getTopReportedRecruitments(Pageable pageable);
+
+    Page<Recruitment> findByEmployerNotBanned(Employer employer, Pageable pageable);
 }
