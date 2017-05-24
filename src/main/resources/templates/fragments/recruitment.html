@@ -163,15 +163,19 @@
                 <div class="col-sm-9 text-center">
                     <a class="btn btn-primary" th:href="@{/employee/apply(recruitmentId=${recruitment.id})}">Nộp đơn</a>
                 </div>
-                <div class="col-sm-3 text-right" th:if="${not isHasReported}">
+                <div class="col-sm-3 text-right" th:if="${recruitment.banned == null}">
                     <a class="btn btn-warning" th:href="@{/recruitment/report(recruitmentId=${recruitment.id})}">Báo cáo nội dung xấu</a><br/>
+                </div>
+                <div class="col-sm-3 text-right" th:if="${recruitment.banned == false}">
+                    <a class="btn btn-success" href="#">Nội dung đã được xác nhận</a><br/>
                 </div>
             </div>
         </div>
 
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="text-center" th:unless="${recruitment.banned}">
-                <a class="btn btn-warning" th:href="@{/recruitment/ban(id=${recruitment.id})}" onclick="return confirm('Bạn có muốn ẩn bài viết này không?')">Ẩn bài viết này</a>
+                <a class="btn btn-success" th:href="@{/recruitment/ban(id=${recruitment.id}, value=false)}" onclick="return confirm('Bạn có muốn xác nhận bài viết này hợp lệ không?')">Xác nhận tin này</a>
+                <a class="btn btn-danger" th:href="@{/recruitment/ban(id=${recruitment.id}, value=true)}" onclick="return confirm('Bạn có muốn ẩn bài viết này không?')">Ẩn tin này</a>
             </div>
         </div>
     </th:block>

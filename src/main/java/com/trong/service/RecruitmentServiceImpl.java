@@ -109,6 +109,7 @@ public class RecruitmentServiceImpl extends AbstractService implements Recruitme
 
         JPAQuery query = from(recruitment)
                 .rightJoin(recruitment.recruitmentReports, recruitmentReport);
+        query.where(recruitment.banned.isNull());
         query.groupBy(recruitment.id);
         query.orderBy(recruitmentReport.id.countDistinct().desc());
 

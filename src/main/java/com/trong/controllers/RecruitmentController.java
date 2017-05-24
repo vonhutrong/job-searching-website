@@ -56,17 +56,13 @@ public class RecruitmentController {
     }
 
     @RequestMapping("/details")
-    public String details(@RequestParam("id") Long id, Model model, Principal principal) {
+    public String details(@RequestParam("id") Long id, Model model) {
         Recruitment recruitment = recruitmentService.findById(id);
         if (null == recruitment) {
             notificationService.addErrorMessage("Invalid.recruitmentId");
             return "error";
         }
         model.addAttribute("recruitment", recruitment);
-        if (null != principal) {
-            Employee employee = employeeService.findByEmail(principal.getName());
-            model.addAttribute("isHasReported", recruitmentReportService.isHasReported(employee, recruitment));
-        }
 
         if (recruitment.getBanned() != null && recruitment.getBanned()) {
             notificationService.addErrorMessage("Banned.recruitment");
@@ -122,12 +118,12 @@ public class RecruitmentController {
     }
 
     @GetMapping("/ban")
-    public String ban(@RequestParam("id") Long id) {
+    public String ban(@RequestParam("id") Long id, @RequestParam("value") Boolean value) {
         Recruitment recruitment = recruitmentService.findById(id);
-        recruitment.setBanned(true);
+        recruitment.setBanned(value);
         recruitmentService.save(recruitment);
-        notificationService.addInfoMessage("Success.banRecruitment");
-        return "redirect:/recruitment/details?id=" + id;
+        notificationService.addInfoMessage(value ? "Success.banRecruitment" : "Success.confirmRecruitment");
+        return "redirect:/";
     }
 
     private String generateAdvancedSearchUrl(AdvancedSearchForm advancedSearchForm) {
