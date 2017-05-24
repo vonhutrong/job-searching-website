@@ -82,7 +82,9 @@
                 <label class="col-sm-3 text-left">Chọn hồ sơ</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="file" th:field="*{cv}"/>
-                    <span th:if="${#fields.hasErrors('cv')}" th:errors="*{cv}"/>
+                    <div class="text-danger">
+                        <span th:if="${#fields.hasErrors('cv')}" th:errors="*{cv}"/>
+                    </div>
                 </div>
             </div>
             <input type="hidden" th:value="${recruitment.id}" th:attr="name='recruitmentId'"/>

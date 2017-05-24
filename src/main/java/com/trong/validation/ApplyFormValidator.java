@@ -12,6 +12,8 @@ public class ApplyFormValidator implements Validator {
     @Autowired
     private RecruitmentService recruitmentService;
 
+    private final long MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
+
     @Override
     public boolean supports(Class<?> aClass) {
         return ApplyForm.class.equals(aClass);
@@ -27,6 +29,8 @@ public class ApplyFormValidator implements Validator {
 
         if (applyForm.getCv().getOriginalFilename().equals("")) {
             errors.rejectValue("cv", "NotNull.applyForm.cv");
+        } else if (applyForm.getCv().getSize() > MAX_FILE_SIZE) {
+            errors.rejectValue("cv", "Limited.fileSize");
         }
     }
 }
