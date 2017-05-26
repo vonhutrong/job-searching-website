@@ -30,70 +30,70 @@
             <br/>
             <h5>Thông tin đăng nhập</h5>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Email</label>
+                <label class="col-sm-3 text-left">Email <span style="color: red">*</span></label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" th:field="*{email}"/>
-                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Mật khẩu</label>
+                <label class="col-sm-3 text-left">Mật khẩu <span style="color: red">*</span></label>
                 <div class="col-sm-6">
                     <input class="form-control" type="password" th:field="*{password}"/>
-                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Gõ lại mật khẩu</label>
+                <label class="col-sm-3 text-left">Gõ lại mật khẩu <span style="color: red">*</span></label>
                 <div class="col-sm-6">
                     <input class="form-control" type="password" th:field="*{passwordConfirm}"/>
-                    <span th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"/>
                 </div>
             </div>
             <br/>
             <h5>Thông tin công ty</h5>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Tên công ty</label>
+                <label class="col-sm-3 text-left">Tên công ty <span style="color: red">*</span></label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" th:field="*{name}"/>
-                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Sơ lược công ty</label>
+                <label class="col-sm-3 text-left">Sơ lược công ty <span style="color: red">*</span></label>
                 <div class="col-sm-6">
                     <textarea class="form-control" th:field="*{description}"></textarea>
-                    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Logo</label>
+                <label class="col-sm-3 text-left">Logo <span style="color: red">*</span></label>
                 <div class="col-sm-6">
-                    <input class="form-control" th:field="*{logo}" type="file"/>
-                    <span th:if="${#fields.hasErrors('logo')}" th:errors="*{logo}"/>
+                    <input class="form-control" th:field="*{logo}" type="file" accept="image/*"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('logo')}" th:errors="*{logo}"/>
                 </div>
             </div>
             <br/>
             <h5>Thông tin liên hệ</h5>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Địa chỉ</label>
+                <label class="col-sm-3 text-left">Địa chỉ <span style="color: red">*</span></label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" th:field="*{address}"/>
-                    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Điện thoại</label>
+                <label class="col-sm-3 text-left">Điện thoại <span style="color: red">*</span></label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" th:field="*{phoneNumber}"/>
-                    <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 text-left">Email</label>
+                <label class="col-sm-3 text-left">Email <span style="color: red">*</span></label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" th:field="*{contactEmail}"/>
-                    <span th:if="${#fields.hasErrors('contactEmail')}" th:errors="*{contactEmail}"/>
+                    <span class="text-danger" th:if="${#fields.hasErrors('contactEmail')}" th:errors="*{contactEmail}"/>
                 </div>
             </div>
 
