@@ -61,7 +61,6 @@ public class EmployeeController {
             model.addAttribute("recruitment", recruitmentService.findById(applyForm.getRecruitmentId()));
             model.addAttribute("employee", employeeService.findByEmail(principal.getName()));
             model.addAttribute("applyForm", applyForm);
-            notificationService.addErrorMessage("ApplyFail.employee");
             return "employee/applying";
         }
 
