@@ -2,6 +2,7 @@ package com.trong.service;
 
 import com.trong.model.ApplyHistory;
 import com.trong.model.Employee;
+import com.trong.model.Recruitment;
 import com.trong.repository.ApplyHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,5 +31,10 @@ public class ApplyHistoryServiceImpl implements ApplyHistoryService {
     @Override
     public Page<ApplyHistory> findByEmployee(Employee employee, Pageable pageable) {
         return applyHistoryRepository.findByEmployeeOrderByDatetimeDesc(employee, pageable);
+    }
+
+    @Override
+    public ApplyHistory findByEmployeeAndRecruitment(Employee employee, Recruitment recruitment) {
+        return applyHistoryRepository.findByEmployeeAndRecruitment(employee, recruitment);
     }
 }

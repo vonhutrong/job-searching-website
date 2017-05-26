@@ -56,7 +56,7 @@ public class RecruitmentController {
     }
 
     @RequestMapping("/details")
-    public String details(@RequestParam("id") Long id, Model model) {
+    public String details(@RequestParam("id") Long id, Model model, Principal principal) {
         Recruitment recruitment = recruitmentService.findById(id);
         if (null == recruitment) {
             notificationService.addErrorMessage("Invalid.recruitmentId");
@@ -67,6 +67,18 @@ public class RecruitmentController {
         if (recruitment.getBanned() != null && recruitment.getBanned()) {
             notificationService.addErrorMessage("Banned.recruitment");
         }
+
+        Boolean applied = null;
+        if (null != principal) {
+            Employee employee = employeeService.findByEmail(principal.getName());
+            if (null != applyHistoryService.findByEmployeeAndRecruitment(employee, recruitment)) {
+                applied = true;
+            } else {
+                applied = false;
+            }
+        }
+        model.addAttribute("applied", applied);
+
         return "recruitment/details";
     }
 

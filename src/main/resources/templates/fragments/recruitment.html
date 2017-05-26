@@ -160,7 +160,7 @@
 
         <div sec:authorize="hasRole('ROLE_EMPLOYEE')">
             <div class="row">
-                <div class="col-sm-9 text-center">
+                <div class="col-sm-9 text-center" th:if="${applied == false}">
                     <a class="btn btn-primary" th:href="@{/employee/apply(recruitmentId=${recruitment.id})}">Nộp đơn</a>
                 </div>
                 <div class="col-sm-3 text-right" th:if="${recruitment.banned == null}">
