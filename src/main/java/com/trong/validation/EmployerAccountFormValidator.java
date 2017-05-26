@@ -5,6 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 public class EmployerAccountFormValidator implements Validator {
+    private final long MAX_FILE_SIZE = 1024 * 1024; //1MB
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -17,6 +18,8 @@ public class EmployerAccountFormValidator implements Validator {
 
         if (employerAccountForm.getLogo().getOriginalFilename().equals("")) {
             errors.rejectValue("logo", "NotNull.employerAccountForm.logo");
+        } else if (employerAccountForm.getLogo().getSize() > MAX_FILE_SIZE) {
+            errors.rejectValue("logo", "LimitedSize.employerAccountForm.logo");
         }
     }
 }
