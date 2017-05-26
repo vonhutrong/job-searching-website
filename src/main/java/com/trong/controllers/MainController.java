@@ -117,7 +117,6 @@ public class MainController {
         new EmployerAccountFormValidator().validate(employerAccountForm, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("employerAccountForm", employerAccountForm);
-            notificationService.addErrorMessage("RegisterFail.employer");
             return "employer/register";
         }
 

@@ -55,7 +55,6 @@ public class EmployerController {
             model.addAttribute("recruitmentForm", recruitmentForm);
             model.addAttribute("departments", departmentService.findAll());
             model.addAttribute("educationalLevels", educationalLevelService.findAll());
-            notificationService.addErrorMessage("PostFail.employer");
             return "employer/public_recruitment";
         }
 
@@ -65,7 +64,7 @@ public class EmployerController {
     }
 
     @GetMapping("/recruitmentManagement")
-    public String manageRecruitment(@PageableDefault(size = 1) Pageable pageable, Model model, Principal principal) {
+    public String manageRecruitment(@PageableDefault(size = 5) Pageable pageable, Model model, Principal principal) {
         Employer employer = employerService.findByEmail(principal.getName());
         Page<Recruitment> recruitments = recruitmentService.findByEmployer(employer, pageable);
         model.addAttribute("page", new PageWrapper<Recruitment>(recruitments, "/employer/recruitmentManagement"));
