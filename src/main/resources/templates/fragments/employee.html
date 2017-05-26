@@ -81,7 +81,7 @@
             <div class="form-group">
                 <label class="col-sm-3 text-left">Chọn hồ sơ</label>
                 <div class="col-sm-6">
-                    <input class="form-control" type="file" th:field="*{cv}"/>
+                    <input class="form-control" type="file" th:field="*{cv}" accept=".doc,.docx,.pdf"/>
                     <div class="text-danger">
                         <span th:if="${#fields.hasErrors('cv')}" th:errors="*{cv}"/>
                     </div>
