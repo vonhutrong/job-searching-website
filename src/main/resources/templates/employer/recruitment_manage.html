@@ -2,11 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragments/common::head"/>
-    <title>Quản lý tin tuyển dụng</title>
+    <title>Xem tin tuyển dụng</title>
 </head>
 <body>
     <div class="container">
         <th:block th:include="fragments/common::header"/>
+        <div class="row text-center"><h4>Danh sách tin tuyển dụng</h4></div>
         <div class="col-lg-8 col-lg-offset-2">
             <th:block th:include="fragments/recruitment::review"/>
         </div>
