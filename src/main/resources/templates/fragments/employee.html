@@ -97,11 +97,15 @@
 
     <th:block th:fragment="apply-management">
         <div class="well" th:each="applyHistory : ${page.content}">
-            <a th:href="@{/recruitment/details(id=${applyHistory.recruitment.id})}">
+            Công ty: <a th:href="@{/recruitment/details(id=${applyHistory.recruitment.id})}">
                 <label class="text-uppercase" th:text="${applyHistory.recruitment.employer.name}"/>
             </a><br/>
+            Công việc: <span th:text="${applyHistory.recruitment.title}"/>
+            <br/>
             <i>Thời gian nộp: <span th:text="${#dates.format(applyHistory.datetime, 'hh:mm dd-MM-yyyy')}"></span></i><br/>
-            Trạng thái: <span th:text="${applyHistory.approved} == null ? 'Đang chờ' : (${applyHistory.approved} ? 'Đạt' : 'Không đạt')"/>
+            <a th:href="@{/recruitment/cv(applyHistoryId=${applyHistory.id})}">Đơn ứng tuyển</a>
+            <br/>
+            Trạng thái duyệt đơn tuyển dụng: <span th:text="${applyHistory.approved} == null ? 'Đang chờ' : (${applyHistory.approved} ? 'Đạt' : 'Không đạt')"/>
             <hr style="border: 0; clear: both; display: block; width: 96%; background-color: lightgray; height: 1px;"/>
         </div>
     </th:block>
